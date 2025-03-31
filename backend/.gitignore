@@ -24,6 +24,7 @@ out/
 *.temp
 *.swp
 *.swo
+*.bak
 
 # IDE specific files
 .vscode/
@@ -34,6 +35,5 @@ out/
 .DS_Store
 Thumbs.db
 
-# Git specific files
-.git/
-.gitignore
+# Miscellaneous
+*.lock
