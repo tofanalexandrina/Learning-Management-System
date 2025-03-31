@@ -1,0 +1,120 @@
+body, html {
+    height: 100%;
+    margin: 0;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+#root, .register-layout {
+    height: 100%;
+}
+
+.register-layout{
+    display: flex;
+}
+
+.left-image{
+    width: 50%;
+}
+
+.register-form{
+    display: flex;
+    justify-content: right;
+    align-items: right;
+    flex-direction: column;
+    text-align: left;
+    background-color: white;
+    height:fit-content;
+}
+
+.title :scope{
+    color: #78A1E1;
+    font-size: 2em;
+    align-self: flex-start;
+    margin-bottom: 30px;
+    margin-top: -50px; 
+}
+
+.input-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-top: 10px;
+}
+
+.input-container input {
+    padding: 10px;
+    height: 20px; 
+    width: 300px;
+    border-radius: 20px;
+    border: 1px solid #4A4A4A; 
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075); 
+    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+}
+
+.register-btn{
+    justify-content: right;
+    align-items: right;
+    text-align: right;
+    
+}
+
+.register-button {
+    margin-top: 45px;
+    margin-bottom: -20px;
+    width: 50%;
+    margin-left: 100px;
+    border-radius: 20px;
+    background-color: #78A1E1;
+    color: white;
+    border-style: solid;
+    border-color: #78A1E1;
+    padding: 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color .15s ease-in-out;
+    font-size: 1em;
+    
+}
+
+.register-button:hover {
+    background-color: white;
+    color: #78A1E1;
+    border-style: solid;
+    border-color: #78A1E1;
+}
+
+.login{
+    margin-top: 40px;
+    margin-bottom: -60px;
+    color: #78A1E1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 1em;
+    width: 100%;
+}
+
+.login-link{
+    border-radius: 20px;
+    background-color: #F4AEA2;
+    margin-top: 4px;
+    color: white;
+    border-style: solid;
+    border-color: #F4AEA2;
+    padding: 10px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color .15s ease-in-out;
+    font-size: 1em;
+    text-decoration: none;
+    width: 100%;
+}
+
+.login-link:hover {
+    background-color: white;
+    color: #F4AEA2;
+    border-style: solid;
+    border-color: #F4AEA2;
+}
+

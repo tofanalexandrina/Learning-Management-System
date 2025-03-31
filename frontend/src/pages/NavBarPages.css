@@ -1,0 +1,17 @@
+body, html {
+    height: 100%;
+    margin: 0;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+.page-layout{
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    color: #4A4A4A;
+}
+
+.page-components{
+    padding-left: 150px;
+    padding-right: 150px;
+}
+
