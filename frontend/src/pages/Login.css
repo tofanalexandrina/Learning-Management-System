@@ -36,9 +36,7 @@ body, html {
     color: #78A1E1;
     font-size: 3em;
     align-self: flex-start;
-    margin-bottom: 30px;
-    margin-top: -50px; 
-}
+    margin-bottom: 30px;}
 
 .input-container-login {
     display: flex;
@@ -58,21 +56,19 @@ body, html {
 }
 
 .login-button {
-    margin-top: 45px;
-    margin-bottom: -20px;
-    width: 50%;
-    margin-left: 130px;
     border-radius: 20px;
     background-color: #78A1E1;
+    margin-top: 40px;
     color: white;
     border-style: solid;
     border-color: #78A1E1;
     padding: 10px;
+    width: 100%;
+    height: fit-content;
     text-align: center;
     cursor: pointer;
     transition: background-color .15s ease-in-out;
     font-size: 1em;
-    
 }
 
 .login-button:hover {

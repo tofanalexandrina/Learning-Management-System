@@ -36,7 +36,18 @@ const Login = () => {
             navigate('/');
             return;
         } catch(professorErr){
-            setError('Invalid email or password');}
+            setError('Professor login failed, trying admin login');
+        }
+
+        try{
+            const adminResponse= await axios.post('http://localhost:5000/api/admin/login', {adminEmail: email, password})
+                localStorage.setItem('adminId', adminResponse.data.adminId);
+                localStorage.setItem('role', adminResponse.data.role);
+                navigate('/admin');
+                return;
+            } catch(adminErr) {
+                setError('Invalid admin email or password');
+            }
         }
         catch(error){
             console.log('Login error:', error);
@@ -56,9 +67,6 @@ const Login = () => {
                         <input type='password' placeholder='Password' name='password' className='password-input' onChange={(e)=>setPassword(e.target.value)} required/>
                     </div>
                     <button type='submit' className='login-button'>Log In</button>
-                    <div className='registration'>
-                        <Link to='/register' className='register-link'>Create Account</Link>
-                    </div>
                 </form>
             </div>
         </div>

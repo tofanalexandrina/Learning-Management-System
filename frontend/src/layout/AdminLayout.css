@@ -1,0 +1,44 @@
+.admin-layout {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    color: #4A4A4A;
+}
+
+.admin-header {
+    background-color: white;
+    padding: 20px 150px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.admin-title {
+    color: #F4AEA2;
+    font-size: 2em;
+    margin: 0;
+}
+
+.logout-btn {
+    border-radius: 10px;
+    background-color: #78A1E1;
+    color: white;
+    border-style: solid;
+    border-color: #78A1E1;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color .15s ease-in-out;
+    font-size: 1em;
+}
+
+.logout-btn:hover {
+    background-color: white;
+    border-style: solid;
+    border-color: #78A1E1;
+    color: #78A1E1;
+}
+
+.admin-content {
+    padding: 40px 150px;
+}
