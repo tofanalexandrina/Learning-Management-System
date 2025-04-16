@@ -4,6 +4,8 @@ import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import image from '../assets/girl-with-books.png';
 import './Login.css';
+import AuthLayout from "../layout/AuthLayout";
+import './AuthForms.css';
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -30,23 +32,23 @@ const Login = () => {
         try{
         const professorResponse= await axios.post('http://localhost:5000/api/professor/login', {professorEmail: email, password})
             localStorage.setItem('professorId', professorResponse.data.professorId);
-            localStorage.setItem('firstName', professorResponse.data.professorFirstName);
-            localStorage.setItem('lastName', professorResponse.data.professorLastName);
+            localStorage.setItem('professorFirstName', professorResponse.data.professorFirstName);
+            localStorage.setItem('professorLastName', professorResponse.data.professorLastName);
             localStorage.setItem('role', 'professor');
             navigate('/');
             return;
         } catch(professorErr){
-            setError('Professor login failed, trying admin login');
+            console.log('Professor login failed, trying admin login');
         }
 
         try{
             const adminResponse= await axios.post('http://localhost:5000/api/admin/login', {adminEmail: email, password})
                 localStorage.setItem('adminId', adminResponse.data.adminId);
-                localStorage.setItem('role', adminResponse.data.role);
+                localStorage.setItem('role', adminResponse.data.role.toString());
                 navigate('/admin');
                 return;
             } catch(adminErr) {
-                setError('Invalid admin email or password');
+                console.log('Invalid admin email or password');
             }
         }
         catch(error){
@@ -56,20 +58,16 @@ const Login = () => {
     }
 
     return (
-        <div className='login-layout'>
-            <img src={image} alt='girl-with-books' className="left-image"/>
-            <div className='login-container'>
-                <div className='title'>Welcome!</div>
+        <AuthLayout image={image} title="Welcome!">
+            <form onSubmit={handleSubmit}>
+                <div className="form-group">
+                    <input type='email' placeholder='Email' value={email} onChange={(e)=>setEmail(e.target.value)} required/>
+                    <input type='password' placeholder='Password' value={password} onChange={(e)=>setPassword(e.target.value)} required/>
+                </div>
                 {error && <div className="error-message">{error}</div>}
-                <form onSubmit={handleSubmit}>
-                    <div className='input-container-login'>
-                        <input type='email' placeholder='Email' autoComplete='off' name='email' className='email-input' onChange={(e)=>setEmail(e.target.value)} required/>
-                        <input type='password' placeholder='Password' name='password' className='password-input' onChange={(e)=>setPassword(e.target.value)} required/>
-                    </div>
-                    <button type='submit' className='login-button'>Log In</button>
+                <button type='submit' className='auth-button'>Log In</button>
                 </form>
-            </div>
-        </div>
+        </AuthLayout>
     );
 };
 

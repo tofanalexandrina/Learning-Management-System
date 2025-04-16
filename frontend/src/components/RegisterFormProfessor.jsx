@@ -5,11 +5,39 @@ import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 
 const RegisterFormProfessor = () => {
-    const [professorEmail, setProfessorEmail] = useState('');
+    const [systemEmail, setSystemEmail] = useState('');
+    const [personalEmail, setPersonalEmail] = useState('');
     const [selectedGroups, setSelectedGroups] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [message, setMessage] = useState('');
     const navigate = useNavigate();
 
     const handleSubmit = (e) => {
+        e.preventDefault();
+        if(!systemEmail || selectedGroups.length === 0){
+            setMessage('Error! System Email and Group are required for registration.');
+            return;
+        }
+        setLoading(true);
+        setMessage('');
+        try{
+            const temporaryPassword=Math.random().toString(36).slice(-8);
+            //sending the registration data to the backend
+            const response=axios.post('http://localhost:5000/api/professor/register', {
+                professorEmail: systemEmail,
+                password: temporaryPassword,
+                groups: selectedGroups,
+                role: 1,
+                professorFirstName: "Pending",
+                professorLastName: "Pending"
+            });
+            setMessage('Professor registered successfully! Now send the invite email!');
+        }catch(error){
+            console.error('Error registering professor:', error);
+            setMessage('Error registering professor. Please try again later.');
+        }finally{
+            setLoading(false);
+        }
         
     }
 
@@ -38,11 +66,40 @@ const RegisterFormProfessor = () => {
         }
     };
 
+    const handleSendInvite = async (e) => {
+        e.preventDefault();
+        if(!systemEmail || !personalEmail || selectedGroups.length === 0){
+            setMessage('Error! All fields are required!');
+            return;
+        }
+        setLoading(true);
+        setMessage('');
+
+        try{
+            const selectedGroupObjects = selectedGroups.map(id => {
+                const group = groups.find(g => g.id === id);
+                return { id, name: group.name };
+            });
+            const response=await axios.post('http://localhost:5000/api/email/send-professor-invite', {
+                personalEmail: personalEmail,
+                systemEmail: systemEmail,
+                groups: selectedGroupObjects
+            });
+            setMessage('Invitation sent successfully!');
+        }catch (error) {
+            console.error('Error sending invite:', error);
+            setMessage('Error sending invite. Please try again later.');
+        } finally {
+            setLoading(false);
+        }
+    }
+
     return (
         <div className='register-form'>
                 <form onSubmit={handleSubmit}>
                     <div className='input-container'>
-                        <input type='email' placeholder='Email' autoComplete='off' name='email' className='email-input' onChange={(e)=>setProfessorEmail(e.target.value)}/>
+                        <input type='email' placeholder='Personal Email' autoComplete='off' name='personalemail' className='email-input' onChange={(e)=>setPersonalEmail(e.target.value)}/>
+                        <input type='email' placeholder='System Email' autoComplete='off' name='systememail' className='email-input' value={systemEmail} onChange={(e) => setSystemEmail(e.target.value)} />
                         <div className='groups-container'>
                         <label className='groups-label'>Select Group(s):</label>
                         <div className='checkbox-group'>
@@ -60,9 +117,13 @@ const RegisterFormProfessor = () => {
                             ))}
                         </div>
                     </div>
-                    </div>
-                    <div className='register-btn'>
+                    {message && <div className={message.includes('Error') ? 'error-message' : 'success-message'}>{message}</div>}
+                </div>
+                <div className='register-btn-group'>
                     <button type='submit' className='register-button'>Register</button>
+                    <button type='button' className='invite-button' onClick={handleSendInvite} disabled={loading}>
+                        {loading ? 'Sending...' : 'Send Email Invite'}
+                    </button>
                     </div>
                 </form>
         </div>

@@ -4,5 +4,6 @@ const StudentController=require('../controllers/StudentController');
 
 router.post('/register', StudentController.registerStudent);
 router.post('/login', StudentController.loginStudent);
+router.post('/complete-registration', StudentController.completeRegistration);
 
 module.exports = router;

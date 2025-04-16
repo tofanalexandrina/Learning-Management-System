@@ -43,3 +43,23 @@ exports.loginStudent = async (req, res) => {
     }
 };
 
+exports.completeRegistration=async(req, res)=>{
+    try{
+        const{studentFirstName, studentLastName, studentEmail, password, token}=req.body;
+        const student=await Student.findOne({studentEmail});
+
+        if(!student){
+            return res.status(404).json({error: 'Student not found'});
+        }
+        student.studentFirstName=studentFirstName;
+        student.studentLastName=studentLastName;
+        const salt=await bcrypt.genSalt(10);
+        student.password=await bcrypt.hash(password, salt);
+        await student.save();
+        res.status(200).json({message: 'Registration completed successfully'});
+    }catch(error){
+        console.error('Error completing registration:', error);
+        res.status(500).json({ error: 'Error completing registration' });
+    }
+}
+

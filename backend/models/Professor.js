@@ -6,7 +6,8 @@ const ProfessorSchema = new mongoose.Schema({
     professorLastName: { type: String, required: true },
     professorEmail: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    role: { type: Number, required: true}
+    role: { type: Number, required: true},
+    groups:[{ type: String }]
 });
 
 module.exports = mongoose.model('Professors', ProfessorSchema);

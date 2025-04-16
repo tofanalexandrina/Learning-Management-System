@@ -9,7 +9,7 @@ exports.loginAdmin = async (req, res) => {
             if(admin){
                 const validPassword = await bcrypt.compare(password, admin.password);
                 if(validPassword){
-                    res.status(200).json({ message: 'Login successful', role: admin.role });
+                    res.status(200).json({ message: 'Login successful', adminId: admin.adminId, role: admin.role });
                 }else{
                     res.status(400).json({ error: 'Invalid password' });
                 }

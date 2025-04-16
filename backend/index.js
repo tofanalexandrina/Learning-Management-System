@@ -16,6 +16,8 @@ app.listen(PORT, ()=>console.log(`Server is running on port ${PORT}`));
 const studentRoutes=require('./routes/StudentRoutes');
 const professorRoutes=require('./routes/ProfessorRoutes');
 const adminRoutes=require('./routes/AdminRoutes');
+const emailRoutes=require('./routes/EmailRoutes');
 app.use('/api/student', studentRoutes);
 app.use('/api/professor', professorRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/email', emailRoutes);

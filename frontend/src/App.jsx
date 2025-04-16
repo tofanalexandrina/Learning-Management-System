@@ -12,12 +12,12 @@ import Profile from "./pages/Profile.jsx";
 import Layout from "./layout/Layout.jsx";
 import AdminDashboard from "./pages/AdminDashboard.jsx";
 import AdminLayout from "./layout/AdminLayout.jsx";
-
+import CompleteRegistration from "./pages/CompleteRegistration.jsx";
 //checking if the user is logged in
 // if not, redirect to login page
 const ProtectedRoute = ({ children }) => {
   const user =
-    localStorage.getItem("studentId") || localStorage.getItem("professorId");
+    localStorage.getItem("studentId") || localStorage.getItem("professorId") || localStorage.getItem("adminId");
 
   if (!user) {
     return <Navigate to="/login" replace />;
@@ -41,6 +41,7 @@ function App() {
       <Routes>
         {/* routes accessible without login(public) */}
         <Route path="/login" element={<Login />} />
+        <Route path="/complete-registration" element={<CompleteRegistration />} />
 
         {/* routes accessible only when user logged in(protected) */}
         <Route path="/" element={<ProtectedRoute><Layout /></ProtectedRoute>}>
