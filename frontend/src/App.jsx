@@ -13,6 +13,7 @@ import Layout from "./layout/Layout.jsx";
 import AdminDashboard from "./pages/AdminDashboard.jsx";
 import AdminLayout from "./layout/AdminLayout.jsx";
 import CompleteRegistration from "./pages/CompleteRegistration.jsx";
+import AdminCourseManagement from "./pages/AdminCourseManagement.jsx";
 //checking if the user is logged in
 // if not, redirect to login page
 const ProtectedRoute = ({ children }) => {
@@ -54,6 +55,7 @@ function App() {
         <Route path="/admin" element={<AdminRoute><AdminLayout /></AdminRoute>}>
           <Route index element={<AdminDashboard />} />
           <Route path="register" element={<RegisterForAdmin />}/>
+          <Route path="courses" element={<AdminCourseManagement />} />
         </Route>
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>

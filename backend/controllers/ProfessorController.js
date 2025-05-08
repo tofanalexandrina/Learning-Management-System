@@ -4,7 +4,7 @@ const { v4: uuidv4 } = require('uuid');
 
 exports.registerProfessor = async (req, res) => {
     try{
-        const { professorFirstName, professorLastName, professorEmail, password, role } = req.body;
+        const { professorFirstName, professorLastName, professorEmail, password, groups, role } = req.body;
         const hashedPassword = await bcrypt.hash(password, 10);
         const professorId = uuidv4();
         const newProfessor = new Professor({
@@ -13,6 +13,7 @@ exports.registerProfessor = async (req, res) => {
             professorLastName,
             professorEmail,
             password: hashedPassword,
+            groups,
             role
         });
         await newProfessor.save();
@@ -43,7 +44,7 @@ exports.loginProfessor = async (req, res) => {
 
 exports.completeRegistration = async (req, res) => {
     try{
-        const { professorFirstName, professorLastName, professorEmail, password, token } = req.body;
+        const { professorFirstName, professorLastName, professorEmail, password, groups,  token } = req.body;
         const professor = await Professor.findOne({ professorEmail });
 
         if(!professor){
@@ -53,9 +54,23 @@ exports.completeRegistration = async (req, res) => {
         professor.professorLastName = professorLastName;
         const salt = await bcrypt.genSalt(10);
         professor.password = await bcrypt.hash(password, salt);
+        if (groups && groups.length > 0) {
+            professor.groups = groups;
+        }
         await professor.save();
         res.status(200).json({ message: 'Registration completed successfully' });
     }catch(err){
         res.status(500).json({ error: 'Error completing registration', details: err.message });
+    }
+};
+
+exports.getAllProfessors = async (req, res) => {
+    try {
+        const professors = await Professor.find({}, { 
+            password: 0
+        });
+        res.status(200).json(professors);
+    } catch (error) {
+        res.status(500).json({ error: 'Error fetching professors', details: error.message });
     }
 };
