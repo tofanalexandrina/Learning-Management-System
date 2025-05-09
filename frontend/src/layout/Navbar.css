@@ -44,6 +44,11 @@
     transition: background-color .15s ease-in-out;
 }
 
+.navbar-item.active {
+    background-color: #F4AEA2;
+    color: white;
+    border-color: #F4AEA2;
+}
 
 .logout-button{
     border-radius: 10px;

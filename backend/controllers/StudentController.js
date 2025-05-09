@@ -31,7 +31,7 @@ exports.loginStudent = async (req, res) => {
         if(student){
             const validPassword=await bcrypt.compare(password, student.password);
             if(validPassword){
-                res.status(200).json({message: 'Login successful', firstName: student.studentFirstName, lastName: student.studentLastName, id: student.studentId, role: student.role});
+                res.status(200).json({message: 'Login successful', studentFirstName: student.studentFirstName, lastName: student.studentLastName, id: student.studentId, role: student.role});
             }else{
                 res.status(400).json({error: 'Invalid password'});
             }

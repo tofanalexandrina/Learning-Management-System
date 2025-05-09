@@ -22,7 +22,7 @@ const Login = () => {
             localStorage.setItem('studentId', studentResponse.data.studentId);
             localStorage.setItem('studentFirstName', studentResponse.data.studentFirstName);
             localStorage.setItem('studentLastName', studentResponse.data.studentLastName);
-            localStorage.setItem('role', 'student');
+            localStorage.setItem('role', '2');
             navigate('/');
             return;
         } catch(studentErr){
@@ -34,7 +34,7 @@ const Login = () => {
             localStorage.setItem('professorId', professorResponse.data.professorId);
             localStorage.setItem('professorFirstName', professorResponse.data.professorFirstName);
             localStorage.setItem('professorLastName', professorResponse.data.professorLastName);
-            localStorage.setItem('role', 'professor');
+            localStorage.setItem('role', '1');
             navigate('/');
             return;
         } catch(professorErr){
