@@ -57,6 +57,11 @@
     color: #666;
 }
 
+.professor-courses {
+    width: 100%; 
+    overflow: hidden; 
+}
+
 .professor-email, .professor-groups {
     margin: 5px 0;
 }
@@ -70,8 +75,9 @@
 
 .courses-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Reduced minimum width */
     gap: 15px;
+    width: 100%;
 }
 
 .course-card {
@@ -79,6 +85,10 @@
     border-radius: 6px;
     padding: 15px;
     position: relative;
+    overflow: hidden;
+    word-break: break-word;
+    display: flex;
+    flex-direction: column;
 }
 
 .course-header {

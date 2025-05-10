@@ -27,12 +27,10 @@ const Homepage = () => {
     return (
         <div className='page-layout'>
             <div className='page-components'>
-                <div className='greeting-container'>
-                    <h1 className='greeting'>Hi, {firstName}!</h1>
-                    <div className='quote-container'>
-                        <p className='quote-text'>{quote.text}</p>
-                        <p className='quote-author'>- {quote.author}</p>
-                    </div>
+                <h1 className='page-title'>Hi, {firstName}!</h1>
+                <div className='quote-container'>
+                    <p className='quote-text'>{quote.text}</p>
+                    <p className='quote-author'>- {quote.author}</p>
                 </div>
             </div>
         </div>

@@ -1,6 +1,8 @@
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import './AdminCourseManagement.css';
+import { GROUPS, getGroupName } from '../constants/groups';
+
 
 const AdminCourseManagement = () => {
     const [professors, setProfessors]=useState([]);
@@ -13,19 +15,6 @@ const AdminCourseManagement = () => {
         className:'',
         assignedGroups:[]
     });
-
-    const groups = [
-        { id: '1', name: 'C-1020' },
-        { id: '2', name: 'C-1021' },
-        { id: '3', name: 'C-1022' },
-        { id: '4', name: 'C-1024' },
-        { id: '5', name: 'E-1025' },
-        { id: '6', name: 'E-1026' },
-        { id: '7', name: 'E-1027' },
-        { id: '8', name: 'E-1028' },
-        { id: '9', name: 'E-1029' },
-        { id: '10', name: 'F-1030' }
-    ];
 
     const fetchProfessors=async()=>{
         try{
@@ -62,11 +51,6 @@ const AdminCourseManagement = () => {
             assignedGroups:professor.groups||[]
         });
         setShowForm(true);
-    }
-
-    const getGroupName=(groupId)=>{
-        const group=groups.find(g=>g.id===groupId);
-        return group?group.name:groupId;
     }
 
     const handleDeleteCourse=async(courseId)=>{
@@ -230,7 +214,7 @@ const AdminCourseManagement = () => {
                                     value={formData.assignedGroups}
                                     onChange={handleGroupChange}
                                 >
-                                    {groups.map(group => (
+                                    {GROUPS.map(group => (
                                         <option key={group.id} value={group.id}>
                                             {group.name}
                                         </option>

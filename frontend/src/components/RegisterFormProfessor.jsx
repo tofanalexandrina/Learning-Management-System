@@ -3,6 +3,8 @@ import axios from 'axios';
 import './RegisterForm.css';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import { GROUPS } from '../constants/groups';
+
 
 const RegisterFormProfessor = () => {
     const [systemEmail, setSystemEmail] = useState('');
@@ -40,20 +42,6 @@ const RegisterFormProfessor = () => {
         }
         
     }
-
-
-    const groups = [
-        { id: '1', name: 'C-1020' },
-        { id: '2', name: 'C-1021' },
-        { id: '3', name: 'C-1022' },
-        { id: '4', name: 'C-1024' },
-        { id: '5', name: 'E-1025' },
-        { id: '6', name: 'E-1026' },
-        { id: '7', name: 'E-1027' },
-        { id: '8', name: 'E-1028' },
-        { id: '9', name: 'E-1029' },
-        {id: '10', name: 'F-1030'}
-    ];
     
     const handleGroupChange = (e) => {
         const groupId = e.target.value;
@@ -103,7 +91,7 @@ const RegisterFormProfessor = () => {
                         <div className='groups-container'>
                         <label className='groups-label'>Select Group(s):</label>
                         <div className='checkbox-group'>
-                            {groups.map(group => (
+                            {GROUPS.map(group => (
                                 <div key={group.id} className='checkbox-item'>
                                     <input
                                         type='checkbox'
@@ -114,7 +102,7 @@ const RegisterFormProfessor = () => {
                                     />
                                     <label htmlFor={`group-${group.id}`}>{group.name}</label>
                                 </div>
-                            ))}
+                            ))} 
                         </div>
                     </div>
                     {message && <div className={message.includes('Error') ? 'error-message' : 'success-message'}>{message}</div>}

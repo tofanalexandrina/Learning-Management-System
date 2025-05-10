@@ -1,0 +1,98 @@
+.page-components {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-top: 30px;
+}
+
+.courses-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+animation: slideIn 0.5s ease-in-out;
+}
+
+.course-card {
+  margin: 20px 0;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  transition: transform 0.2s, box-shadow 0.2s;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.course-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+}
+
+.course-header-main {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eee;
+  flex-wrap: nowrap;
+
+  .course-name {
+    color: #f4aea2;
+    margin: 0;
+    font-size: 1.1em;
+    max-width: 70%;
+  }
+  .course-class {
+    color: #78a1e1;
+    font-size: 0.9em;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+}
+
+.course-details {
+  flex-grow: 1;
+  margin-bottom: 15px;
+}
+
+.professor-info p,
+.groups-info p,
+.course-code p {
+  margin: 8px 0;
+  font-size: 0.9em;
+}
+
+.professor-info,
+.groups-info {
+  margin-bottom: 10px;
+}
+
+.enter-course-btn {
+  background-color: #f4aea2;
+  color: white;
+  border: 1px solid #f4aea2;
+  border-radius: 5px;
+  padding: 10px 15px;
+  cursor: pointer;
+  font-size: 0.95em;
+  transition: all 0.2s;
+  margin-top: auto;
+}
+
+.enter-course-btn:hover {
+  background-color: white;
+  color: #f4aea2;
+}
+
+@keyframes slideIn {
+    from { 
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to { 
+        opacity: 1;
+        transform: translateX(0);
+    }
+}

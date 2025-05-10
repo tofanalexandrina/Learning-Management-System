@@ -125,5 +125,40 @@ exports.deleteCourse=async(req, res)=>{
         console.error('Error deleting course:', err);   
         res.status(500).json({ error: 'Error deleting course', details: err.message });
     }
-}
+};
+
+exports.enrollStudentsByGroups = async function(courseId, groups) {
+    try {
+        const students = await Student.find({ group: { $in: groups } });
+        
+        const updatePromises = students.map(student => {
+            if (!student.courses.includes(courseId)) {
+                student.courses.push(courseId);
+                return student.save();
+            }
+            return Promise.resolve();
+        });
+        
+        await Promise.all(updatePromises);
+    } catch (error) {
+        console.error('Error enrolling students by groups:', error);
+        throw error;
+    }
+};
+
+exports.unenrollStudentsByGroups = async function(courseId, groups) {
+    try {
+        const students = await Student.find({ group: { $in: groups } });
+        
+        const updatePromises = students.map(student => {
+            student.courses = student.courses.filter(id => !id.equals(courseId));
+            return student.save();
+        });
+        
+        await Promise.all(updatePromises);
+    } catch (error) {
+        console.error('Error unenrolling students by groups:', error);
+        throw error;
+    }
+};
 

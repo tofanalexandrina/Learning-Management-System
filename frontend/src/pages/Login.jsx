@@ -31,7 +31,9 @@ const Login = () => {
         
         try{
         const professorResponse= await axios.post('http://localhost:5000/api/professor/login', {professorEmail: email, password})
-            localStorage.setItem('professorId', professorResponse.data.professorId);
+
+            //console.log('Professor login response:', professorResponse.data);
+            localStorage.setItem('professorId', professorResponse.data.id);
             localStorage.setItem('professorFirstName', professorResponse.data.professorFirstName);
             localStorage.setItem('professorLastName', professorResponse.data.professorLastName);
             localStorage.setItem('role', '1');
