@@ -23,6 +23,20 @@ exports.createCourse=async(req, res)=>{
 
         //for autoenrolling students from assigned groups
         if(assignedGroups && assignedGroups.length>0){
+            const professor=await Professor.findOne({professorId});
+            if(professor){
+                const newGroups=[];
+                assignedGroups.forEach(group=>{
+                    if(!professor.groups.includes(group)){
+                        newGroups.push(group);
+                    }
+                });
+                if(newGroups.length>0){
+                    professor.groups=[...professor.groups, ...newGroups];
+                    await professor.save();
+                    console.log(`Updated professor groups: ${professor.groups}`);
+                }
+            }
             await this.enrollStudentsByGroups(newCourse._id, assignedGroups);
         }
 

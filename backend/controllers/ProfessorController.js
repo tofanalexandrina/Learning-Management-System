@@ -30,7 +30,14 @@ exports.loginProfessor = async (req, res) => {
         if(professor){
             const validPassword = await bcrypt.compare(password, professor.password);
             if(validPassword){
-                res.status(200).json({ message: 'Login successful', professorFirstName: professor.professorFirstName, lastName: professor.professorLastName, id: professor.professorId, role: professor.role });
+                res.status(200).json({ 
+                    message: 'Login successful', 
+                    professorFirstName: professor.professorFirstName, 
+                    professorLastName: professor.professorLastName, 
+                    id: professor.professorId, 
+                    role: professor.role,
+                    professorEmail: professor.professorEmail,
+                    groups: professor.groups});
             }else{
                 res.status(400).json({ error: 'Invalid password' });
             }

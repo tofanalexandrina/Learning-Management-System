@@ -21,8 +21,10 @@ const Login = () => {
         const studentResponse= await axios.post('http://localhost:5000/api/student/login', {studentEmail: email, password})
             localStorage.setItem('studentId', studentResponse.data.studentId);
             localStorage.setItem('studentFirstName', studentResponse.data.studentFirstName);
-            localStorage.setItem('studentLastName', studentResponse.data.studentLastName);
-            localStorage.setItem('role', '2');
+            localStorage.setItem('studentLastName', studentResponse.data.lastName);
+            localStorage.setItem('studentEmail', email);
+            localStorage.setItem('studentGroup', studentResponse.data.group);
+            localStorage.setItem('role', '2');            
             navigate('/');
             return;
         } catch(studentErr){
@@ -31,11 +33,14 @@ const Login = () => {
         
         try{
         const professorResponse= await axios.post('http://localhost:5000/api/professor/login', {professorEmail: email, password})
+        console.log('Professor login response:', professorResponse.data);
 
             //console.log('Professor login response:', professorResponse.data);
             localStorage.setItem('professorId', professorResponse.data.id);
             localStorage.setItem('professorFirstName', professorResponse.data.professorFirstName);
             localStorage.setItem('professorLastName', professorResponse.data.professorLastName);
+            localStorage.setItem('professorEmail', professorResponse.data.professorEmail);
+            localStorage.setItem('professorGroups', JSON.stringify(professorResponse.data.groups));
             localStorage.setItem('role', '1');
             navigate('/');
             return;

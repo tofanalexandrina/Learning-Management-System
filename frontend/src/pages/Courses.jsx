@@ -26,21 +26,25 @@ const Courses = () => {
                 const professorResponse=await axios.get('http://localhost:5000/api/professor/all');
                 setProfessors(professorResponse.data);
 
-                console.log('Professor ID from localStorage:', professorId);
-
+                console.log('Role:', role);
+                console.log('Student ID:', studentId);
+                console.log('Professor ID:', professorId);
                 const coursesResponse = await axios.get('http://localhost:5000/api/course');
 
                 //student
-                if(role==='2'){
+                if(role==='2'&&studentId){
+                    try{
                     //getting student group
                     const studentResponse=await axios.get(`http://localhost:5000/api/student/${studentId}`);
                     const studentGroup=studentResponse.data.group;
-
                     //filtering courses by group
                     const studentCourses=coursesResponse.data.filter(course=>
                         course.assignedGroups.includes(studentGroup)
                     );
                     setCourses(studentCourses);
+                } catch(err){
+                    console.error('Error fetching student data:', err);
+                }
                 }
                 //profesor
                 else if(role==='1'){
@@ -59,11 +63,8 @@ const Courses = () => {
     return (
         <div className='page-layout'>
             <div className='page-components'>
-            <h1 className="page-title">Your Courses</h1>
             {courses.length ===0 ? (
-                <div className="no-courses-message">
-                    <p>You don't have any courses yet.</p>
-                </div>
+                console.log('No courses found for this user.')
             ):(
                 <div className='courses-grid'>
                     {courses.map(course=>(
@@ -78,13 +79,16 @@ const Courses = () => {
                                             <p>Professor: {getProfessorName(course.professorId)}</p>
                                         </div>
                                     ) : (
-                                        <div className="groups-info">
-                                            <p>Groups: {getGroupNames(course.assignedGroups)}</p>
-                                        </div>
+                                        <>
+                                            <div className="groups-info">
+                                                <p>Groups: {getGroupNames(course.assignedGroups)}</p>
+                                            </div>
+                                            <div className="course-code">
+                                                <p>Access Code: {course.accessCode}</p>
+                                            </div>
+                                        </>
+                                        
                                     )}
-                                  <div className="course-code">
-                                        <p>Access Code: {course.accessCode}</p>
-                                    </div>
                              </div>  
                             <button className="enter-course-btn">View Course</button>
 
