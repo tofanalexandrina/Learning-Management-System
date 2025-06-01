@@ -1,0 +1,184 @@
+.materials-view{
+    padding: 20px 0;
+}
+
+.materials-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.upload-btn{
+    background-color: #F4AEA2;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+.upload-btn:hover, .add-first-btn:hover{
+    background-color: #ec8a7d;
+}
+
+.materials-error{
+    color: #e05e4e;
+    margin-bottom:20px;
+    padding: 10px;
+    background-color: #ffecec;
+    border-radius: 5px;
+}
+
+.material-upload-form {
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.material-upload-form h3 {
+  margin-top: 0;
+  color: #4A4A4A;
+  font-size: 1.2em;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 8px;
+  color: #555;
+}
+
+.form-group input[type="text"],
+.form-group textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1em;
+}
+
+.form-group input[type="file"] {
+  padding: 10px 0;
+}
+
+.form-group textarea {
+  height: 100px;
+  resize: vertical;
+}
+
+.upload-status {
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 15px;
+}
+
+.upload-status.success {
+  background-color: #e7f7e7;
+  color: #4CAF50;
+}
+
+.upload-status.error {
+  background-color: #ffecec;
+  color: #e05e4e;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.submit-btn {
+  background-color: #78A1E1;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.submit-btn:hover {
+  background-color: #6691d2;
+}
+
+.materials-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.no-materials {
+  text-align: center;
+  padding: 30px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  color: #777;
+}
+
+.material-card {
+  background-color: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.material-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.material-info {
+  flex-grow: 1;
+}
+
+.material-info h3 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  color: #4A4A4A;
+}
+
+.material-description {
+  color: #666;
+  margin-bottom: 15px;
+}
+
+.upload-date {
+  color: #999;
+  font-size: 0.9em;
+  margin-bottom: 0;
+}
+
+.download-btn {
+  background-color: #78A1E1;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 15px;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: background-color 0.2s;
+}
+
+.download-btn:hover {
+  background-color: #6691d2;
+}
+
+.materials-loading {
+  text-align: center;
+  padding: 30px;
+  color: #78A1E1;
+  font-weight: 500;
+}

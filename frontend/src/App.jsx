@@ -14,6 +14,7 @@ import AdminDashboard from "./pages/AdminDashboard.jsx";
 import AdminLayout from "./layout/AdminLayout.jsx";
 import CompleteRegistration from "./pages/CompleteRegistration.jsx";
 import AdminCourseManagement from "./pages/AdminCourseManagement.jsx";
+import CourseView from "./pages/CourseView.jsx";
 //checking if the user is logged in
 // if not, redirect to login page
 const ProtectedRoute = ({ children }) => {
@@ -49,6 +50,7 @@ function App() {
           <Route index element={<Homepage />} />
           <Route path="/courses" element={<Courses />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/course/:courseId" element={<ProtectedRoute><CourseView /></ProtectedRoute>}/>
         </Route>
 
         {/* routes accessible only when admin logged in */}

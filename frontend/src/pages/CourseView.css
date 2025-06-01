@@ -1,0 +1,132 @@
+.page-layout .course-view-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.loading-container, 
+.error-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 50px;
+  text-align: center;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin: 20px 0;
+}
+
+.page-layout .loading-container {
+  color: #78A1E1;
+  font-size: 1.1em;
+}
+
+.page-layout .error-container {
+  color: #e05e4e;
+}
+
+.page-layout .error-container button {
+  margin-top: 20px;
+  background-color: #78A1E1;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.page-layout .error-container button:hover {
+  background-color: #6691d2;
+}
+
+.page-layout .course-header {
+  display: flex;
+  flex-direction: column;
+  margin: 30px 0 30px 0;
+  animation: fadeIn 0.3s ease-out;
+  padding: 0 20px;
+}
+
+.course-title-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.page-title {
+  margin: 0 0 15px 0;
+  font-size: 2.2em;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.course-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-top: 5px;
+}
+
+.course-class-view, .course-code-view, .course-groups-view {
+  font-size: 0.95em;
+  color: #666;
+  background-color: #f5f7fa;
+  padding: 6px 12px;
+  border-radius: 4px;
+}
+
+.page-layout .course-tabs {
+  display: flex;
+  border-bottom: 2px solid #e0e0e0;
+  margin: 0 20px 20px;
+  gap: 6px;
+}
+
+.page-layout .tab-button {
+  background: none;
+  border: none;
+  padding: 12px 24px;
+  font-size: 1em;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  color: #666;
+  font-weight: 500;
+}
+
+.page-layout .tab-button:hover {
+  color: #78A1E1;
+}
+
+.page-layout .tab-button.active {
+  color: #78A1E1;
+  font-weight: 600;
+}
+
+.page-layout .tab-button.active::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background-color: #78A1E1;
+}
+
+.page-layout .tab-content {
+  padding: 20px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  margin: 0 20px;
+  min-height: 400px;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+

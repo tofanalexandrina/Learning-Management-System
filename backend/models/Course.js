@@ -6,7 +6,19 @@ const CourseSchema = new mongoose.Schema({
     professorId: { type: String, ref: 'Professor', required: true },
     accessCode: { type: String, required: true },
     class: { type: String, required: true },
-    assignedGroups: [{ type: String, required: true }]
-});
+    assignedGroups: [{ type: String, required: true }],
+    courseWeeks:[{
+        weekId: String,
+        startDate: Date,
+        endDate: Date,
+        title: String,
+        materials: [{
+            materialId: {type: String, ref: 'Material'}
+        }],
+        homeworks:[{
+            homeworkId:{type: String, ref: 'Homework'}
+        }]
+    }]
+}); 
 
 module.exports = mongoose.model('Courses', CourseSchema);

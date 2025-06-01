@@ -18,8 +18,11 @@ const professorRoutes=require('./routes/ProfessorRoutes');
 const adminRoutes=require('./routes/AdminRoutes');
 const emailRoutes=require('./routes/EmailRoutes');
 const courseRoutes=require('./routes/CourseRoutes');
+const materialRoutes=require('./routes/MaterialRoutes');
+
 app.use('/api/student', studentRoutes);
 app.use('/api/professor', professorRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/email', emailRoutes);
 app.use('/api/course', courseRoutes);
+app.use('/api/material', materialRoutes);

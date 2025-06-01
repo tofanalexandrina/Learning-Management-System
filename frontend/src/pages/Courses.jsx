@@ -3,8 +3,10 @@ import axios from 'axios';
 import './NavBarPages.css';
 import './Courses.css';
 import {getGroupName} from '../constants/groups';
+import {useNavigate} from 'react-router-dom';
 
 const Courses = () => {
+    const navigate=useNavigate();
     const [courses, setCourses] = useState([]);
     const [professors, setProfessors]= useState([]);
 
@@ -18,6 +20,10 @@ const Courses = () => {
     }
     const getGroupNames=(groupIds)=>{
         return groupIds.map(id=>getGroupName(id)).join(', ');
+    }
+
+    const handleViewCourse=(courseId)=>{
+        navigate(`/course/${courseId}`);
     }
 
     useEffect(()=>{
@@ -90,7 +96,7 @@ const Courses = () => {
                                         
                                     )}
                              </div>  
-                            <button className="enter-course-btn">View Course</button>
+                            <button className="enter-course-btn" onClick={()=>handleViewCourse(course.courseId)}>View Course</button>
 
                         </div>
                     ))}
