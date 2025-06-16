@@ -1,0 +1,419 @@
+.homeworks-view {
+    padding: 20px 0;
+}
+
+.homeworks-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.homeworks-header h2 {
+    margin: 0;
+    font-size: 1.5em;
+    color: #4A4A4A;
+}
+
+.upload-btn, .view-submissions-btn, .back-btn {
+    background-color: #78A1E1;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+.upload-btn:hover, .view-submissions-btn:hover, .back-btn:hover {
+    background-color: #6691d2;
+}
+
+.homeworks-error {
+    color: #e05e4e;
+    margin-bottom: 20px;
+    padding: 10px;
+    background-color: #ffecec;
+    border-radius: 5px;
+}
+
+.homework-upload-form {
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.homework-upload-form h3 {
+    margin-top: 0;
+    color: #4A4A4A;
+    font-size: 1.2em;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 8px;
+    color: #555;
+}
+
+.form-group input[type="text"],
+.form-group input[type="datetime-local"],
+.form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1em;
+}
+
+.form-group input[type="file"] {
+    padding: 10px 0;
+}
+
+.form-group textarea {
+    height: 100px;
+    resize: vertical;
+}
+
+.upload-status, .submit-status {
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+.upload-status.success, .submit-status.success {
+    background-color: #e7f7e7;
+    color: #4CAF50;
+}
+
+.upload-status.error, .submit-status.error {
+    background-color: #ffecec;
+    color: #e05e4e;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.submit-btn {
+    background-color: #78A1E1;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.submit-btn:hover {
+    background-color: #6691d2;
+}
+
+.homeworks-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.no-homeworks, .no-submissions {
+    text-align: center;
+    padding: 30px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    color: #777;
+}
+
+.homework-card {
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.homework-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.homework-info h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: #4A4A4A;
+}
+
+.homework-description {
+    color: #666;
+    margin-bottom: 15px;
+    white-space: pre-line;
+}
+
+.due-date {
+    color: #F4AEA2;
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+
+.due-date.overdue {
+    color: #e05e4e;
+}
+
+.upload-date {
+    color: #999;
+    font-size: 0.9em;
+    margin-bottom: 15px;
+}
+
+.homework-files {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+}
+
+.homework-files h4 {
+    margin-top: 0;
+    margin-bottom: 12px;
+    font-size: 1em;
+    color: #4A4A4A;
+}
+
+.download-btn, .download-submission-btn {
+    background-color: #78A1E1;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 15px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: background-color 0.2s;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+.download-btn:hover, .download-submission-btn:hover {
+    background-color: #6691d2;
+}
+
+.student-submission-container {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+}
+
+.student-submission-info {
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 5px;
+}
+
+.student-submission-info h4 {
+    margin-top: 0;
+    margin-bottom: 12px;
+    color: #4A4A4A;
+}
+
+.submission-details p {
+    margin: 8px 0;
+}
+
+.submission-details .label {
+    font-weight: 500;
+    margin-right: 5px;
+    color: #555;
+}
+
+.submission-details .value {
+    color: #4A4A4A;
+}
+
+.submission-form {
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 5px;
+}
+
+.submission-form h4 {
+    margin-top: 0;
+    margin-bottom: 12px;
+    color: #4A4A4A;
+}
+
+.file-upload-container {
+    margin-bottom: 15px;
+}
+
+.submission-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.cancel-btn {
+    background-color: #f0f0f0;
+    color: #555;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 15px;
+    cursor: pointer;
+}
+
+.cancel-btn:hover {
+    background-color: #e0e0e0;
+}
+
+.submit-homework-btn {
+    background-color: #78A1E1;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.2s;
+    width: 100%;
+}
+
+.submit-homework-btn.disabled {
+    background-color: #cccccc;
+    color: #666666;
+    cursor: not-allowed;
+    border-color: #cccccc;
+}
+
+.submit-homework-btn.disabled:hover {
+    background-color: #cccccc;
+    color: #666666;
+}
+
+.submit-homework-btn:hover {
+    background-color: #6691d2;
+}
+
+.resubmit-btn {
+    background-color: #f0f0f0;
+    color: #555;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 15px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.resubmit-btn:hover {
+    background-color: #e0e0e0;
+}
+
+.view-submissions-container {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+    text-align: right;
+}
+
+/* Submissions view */
+.submissions-view {
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.submissions-view h3 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: #4A4A4A;
+}
+
+.loading-submissions {
+    text-align: center;
+    padding: 20px;
+    color: #777;
+}
+
+.submission-groups {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.groups-list h4 {
+    margin-top: 0;
+    margin-bottom: 12px;
+    color: #4A4A4A;
+}
+
+.group-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.group-btn {
+    background-color: #f0f0f0;
+    color: #555;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 15px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.group-btn:hover {
+    background-color: #e0e0e0;
+}
+
+.group-btn.active {
+    background-color: #78A1E1;
+    color: white;
+}
+
+.group-submissions h4 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #4A4A4A;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.submissions-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.submission-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 5px;
+}
+
+.submission-info {
+    flex-grow: 1;
+}
+
+.student-name, .submission-date, .file-name {
+    margin: 5px 0;
+}
+
+.submission-info .label {
+    font-weight: 500;
+    margin-right: 5px;
+    color: #555;
+}
+
+.submission-info .value {
+    color: #4A4A4A;
+}

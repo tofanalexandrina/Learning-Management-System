@@ -27,10 +27,10 @@ const MaterialsView=({courseId, isProfessor})=>{
             setLoading(false);
         }
     };
+    
     useEffect(()=>{
         fetchMaterials();
     }, [courseId]);
-
 
     const handleInputChange=(e)=>{
         const{name, value}=e.target;
@@ -40,6 +40,7 @@ const MaterialsView=({courseId, isProfessor})=>{
     const handleFileChange=(e)=>{
         setUploadForm({...uploadForm, file: e.target.files[0]});
     };
+    
     const handleSubmit=async(e)=>{
         e.preventDefault();
 
@@ -53,7 +54,7 @@ const MaterialsView=({courseId, isProfessor})=>{
             formData.append('materialTitle', uploadForm.title);
             formData.append('materialDescription', uploadForm.description);
             formData.append('courseId', courseId);
-            formData.append('materialFile', uploadForm.file); // Change from 'file' to 'materialFile'
+            formData.append('materialFile', uploadForm.file); 
 
             await axios.post('http://localhost:5000/api/material/upload', formData, {
                 headers: {
@@ -63,11 +64,9 @@ const MaterialsView=({courseId, isProfessor})=>{
             setUploadStatus({message: 'Material uploaded successfully', type: 'success'});
             setUploadForm({title: '', description: '', file: null});
 
-            //refresh materials list
             fetchMaterials();
 
-            //hide form after upload
-            setTimeout(()=>{
+            setTimeout(() => {
                 setShowUploadForm(false);
                 setUploadStatus({message: '', type: ''});
             }, 2000);
@@ -77,13 +76,14 @@ const MaterialsView=({courseId, isProfessor})=>{
         }finally{
             setLoading(false);
         }
-    }
+    };
 
     const handleDownload=async(materialId, fileName)=>{
         try{
-            const response=await axios.get(`http://localhost:5000/api/material/download/${materialId}`,{
+            const response=await axios.get(`http://localhost:5000/api/material/download/${materialId}`, {
                 responseType: 'blob'
             });
+            
             const url=window.URL.createObjectURL(new Blob([response.data]));
             const link=document.createElement('a');
             link.href=url;
@@ -93,9 +93,9 @@ const MaterialsView=({courseId, isProfessor})=>{
             document.body.removeChild(link);
         }catch(err){
             console.error("Error downloading material:", err);
-            alert('Failed to download material.');
+            alert('Failed to download material');
         }
-    }
+    };
 
     if(loading&&materials.length===0){
         return <div className='loading-container'>Loading materials...</div>;
@@ -104,13 +104,17 @@ const MaterialsView=({courseId, isProfessor})=>{
     return(
         <div className='materials-view'>
             <div className='materials-header'>
-                {isProfessor &&(
-                <button className='upload-btn' onClick={()=>setShowUploadForm(!showUploadForm)}>
-                    {showUploadForm ? 'Cancel' : '+ Upload Material'}
-                </button>
+                <h2>Course Materials</h2>
+                {isProfessor && (
+                    <button className='upload-btn' onClick={()=>setShowUploadForm(!showUploadForm)}>
+                        {showUploadForm ? 'Cancel' : '+ Upload Material'}
+                    </button>
                 )}
             </div>
-            {showUploadForm &&(
+            
+            {error && <div className="materials-error">{error}</div>}
+            
+            {showUploadForm && (
                 <div className='material-upload-form'>
                     <h3>Upload New Material</h3>
                     <form onSubmit={handleSubmit}>
@@ -155,11 +159,11 @@ const MaterialsView=({courseId, isProfessor})=>{
             )}
 
             <div className='materials-list'>
-                {materials.length===0?(
+                {materials.length===0 ? (
                     <div className="no-materials">
                         <p>No materials available for this course yet.</p>
                     </div>
-                ):(
+                ) : (
                     materials.map(material => (
                         <div key={material.materialId} className="material-card">
                             <div className="material-info">

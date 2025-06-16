@@ -9,6 +9,13 @@
     margin-bottom: 20px;
 }
 
+/* Add this new style for the header */
+.materials-header h2 {
+    margin: 0;
+    font-size: 1.5em;
+    color: #4A4A4A;
+}
+
 .upload-btn{
     background-color: #F4AEA2;
     color: white;

@@ -5,11 +5,13 @@ const HomeworkSchema = new mongoose.Schema({
     homeworkTitle: { type: String, required: true },
     courseId: { type: mongoose.Schema.Types.ObjectId, ref: 'Course', required: true },
     homeworkDescription: { type: String, required: true },
+    dueDate: { type: Date },
     homeworkFiles: [{
         fileName: { type: String, required: true },
         filePath: { type: String, required: true },
         uploadDate: { type: Date, default: Date.now }
-    }]
+    }],
+    createdAt: { type: Date, default: Date.now }
 });
 
 module.exports = mongoose.model('Homework', HomeworkSchema);
