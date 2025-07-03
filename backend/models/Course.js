@@ -17,6 +17,9 @@ const CourseSchema = new mongoose.Schema({
         }],
         homeworks:[{
             homeworkId:{type: String, ref: 'Homework'}
+        }],
+        quizzes: [{
+            quizId: {type: String, ref: 'Quiz'}
         }]
     }]
 }); 

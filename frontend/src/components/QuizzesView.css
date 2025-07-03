@@ -536,3 +536,33 @@
     color: #78A1E1;
     font-weight: 500;
 }
+
+/* Add this to your existing CSS */
+.time-remaining {
+    font-weight: 700;
+    color: #F4AEA2;
+    padding: 5px 10px;
+    border-radius: 5px;
+    background-color: #f8f8f8;
+    border: 1px solid #eee;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.7; }
+    100% { opacity: 1; }
+}
+
+/* When time is running low */
+.time-remaining.low {
+    color: #ffffff;
+    background-color: #e05e4e;
+    animation: fastPulse 1s infinite;
+}
+
+@keyframes fastPulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}

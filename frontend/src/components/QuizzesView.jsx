@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import axios from 'axios';
 import './QuizzesView.css';
 
 const QuizzesView = ({ courseId, isProfessor }) => {
@@ -31,6 +32,10 @@ const QuizzesView = ({ courseId, isProfessor }) => {
     const [quizResults, setQuizResults] = useState(null);
     const [quizTimeLeft, setQuizTimeLeft] = useState(null);
     const [timeoutId, setTimeoutId] = useState(null);
+    const [remainingTime, setRemainingTime] = useState(null);
+    const intervalRef = useRef(null);
+    
+    const studentId = localStorage.getItem('studentId');
     
     // Helper function to format date for datetime-local input
     function formatDateForInput(date) {
@@ -53,76 +58,57 @@ const QuizzesView = ({ courseId, isProfessor }) => {
         return now >= startDate && now <= endDate;
     }
     
-    // Mock data - replace with API calls later
+    // Fetch quizzes from API
     useEffect(() => {
-        // Simulate loading quizzes
-        setTimeout(() => {
-            // Mock quiz data
-            const mockQuizzes = [
-                {
-                    id: '1',
-                    title: 'Midterm Quiz',
-                    description: 'Test your understanding of the first half of the course.',
-                    createdAt: new Date('2023-10-10'),
-                    startDate: new Date(new Date().getTime() - 2 * 24 * 60 * 60 * 1000), // 2 days ago
-                    endDate: new Date(new Date().getTime() + 5 * 24 * 60 * 60 * 1000), // 5 days from now
-                    timeLimit: 30,
-                    questions: [
-                        {
-                            id: '1',
-                            text: 'What is the correct answer to this question?',
-                            options: ['Option A', 'Option B', 'Option C', 'Option D'],
-                            correctOption: 2
-                        },
-                        {
-                            id: '2',
-                            text: 'Which of the following is true?',
-                            options: ['Statement 1', 'Statement 2', 'Statement 3', 'Statement 4'],
-                            correctOption: 1
-                        }
-                    ]
-                },
-                {
-                    id: '2',
-                    title: 'Final Quiz',
-                    description: 'Comprehensive test covering all course materials.',
-                    createdAt: new Date('2023-11-15'),
-                    startDate: new Date(new Date().getTime() + 10 * 24 * 60 * 60 * 1000), // 10 days from now
-                    endDate: new Date(new Date().getTime() + 14 * 24 * 60 * 60 * 1000), // 14 days from now
-                    timeLimit: 45,
-                    questions: [
-                        {
-                            id: '1',
-                            text: 'Sample question 1?',
-                            options: ['Option A', 'Option B', 'Option C', 'Option D'],
-                            correctOption: 0
-                        },
-                        {
-                            id: '2',
-                            text: 'Sample question 2?',
-                            options: ['Option A', 'Option B', 'Option C', 'Option D'],
-                            correctOption: 3
-                        },
-                        {
-                            id: '3',
-                            text: 'Sample question 3?',
-                            options: ['Option A', 'Option B', 'Option C', 'Option D'],
-                            correctOption: 1
-                        }
-                    ]
-                }
-            ];
-            
-            // Mock results data - this would come from your API in the future
-            const mockResults = {
-                '1': { score: 1, total: 2, percentage: 50 }
-            };
-            
-            setQuizzes(mockQuizzes);
-            setUserQuizResults(mockResults);
-            setLoading(false);
-        }, 1000);
+        const fetchQuizzes = async () => {
+            try {
+                setLoading(true);
+                const response = await axios.get(`http://localhost:5000/api/quiz/course/${courseId}`);
+                setQuizzes(response.data);
+                setError('');
+            } catch (err) {
+                console.error("Error fetching quizzes:", err);
+                setError('Failed to load quizzes.');
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchQuizzes();
     }, [courseId]);
+    
+    // Fetch student's quiz submissions
+    useEffect(() => {
+        const fetchStudentSubmissions = async () => {
+            if (!isProfessor && quizzes.length > 0 && studentId) {
+                try {
+                    const submissionData = {};
+                    
+                    // Get submission for each quiz
+                    for (const quiz of quizzes) {
+                        try {
+                            const response = await axios.get(`http://localhost:5000/api/quiz/student-submission/${quiz.quizId}/${studentId}`);
+                            if (response.data) {
+                                submissionData[quiz.quizId] = {
+                                    score: response.data.score,
+                                    total: response.data.totalQuestions,
+                                    percentage: response.data.percentage
+                                };
+                            }
+                        } catch (err) {
+                            console.error(`Error fetching submission for quiz ${quiz.quizId}:`, err);
+                        }
+                    }
+                    
+                    setUserQuizResults(submissionData);
+                } catch (err) {
+                    console.error("Error fetching student submissions:", err);
+                }
+            }
+        };
+
+        fetchStudentSubmissions();
+    }, [quizzes, isProfessor, studentId]);
     
     // Handle input changes for the quiz form
     const handleQuizFormChange = (e) => {
@@ -177,7 +163,7 @@ const QuizzesView = ({ courseId, isProfessor }) => {
     };
     
     // Handle quiz form submission
-    const handleCreateQuiz = (e) => {
+    const handleCreateQuiz = async (e) => {
         e.preventDefault();
         
         // Validate form
@@ -214,35 +200,46 @@ const QuizzesView = ({ courseId, isProfessor }) => {
             }
         }
         
-        // Here you would send the data to your backend
-        console.log('Quiz data to send:', quizForm);
-        
-        // For now, just add it to the local state
-        const newQuiz = {
-            id: Date.now().toString(),
-            ...quizForm,
-            startDate: new Date(quizForm.startDate),
-            endDate: new Date(quizForm.endDate),
-            createdAt: new Date()
-        };
-        
-        setQuizzes([...quizzes, newQuiz]);
-        setShowCreateForm(false);
-        setQuizForm({
-            title: '',
-            description: '',
-            timeLimit: 30,
-            startDate: formatDateForInput(new Date()),
-            endDate: formatDateForInput(new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)),
-            questions: [{ 
-                text: '',
-                options: ['', '', '', ''],
-                correctOption: 0
-            }]
-        });
+        try {
+            setLoading(true);
+            const response = await axios.post('http://localhost:5000/api/quiz/create', {
+                title: quizForm.title,
+                description: quizForm.description,
+                courseId,
+                timeLimit: quizForm.timeLimit,
+                startDate: quizForm.startDate,
+                endDate: quizForm.endDate,
+                questions: quizForm.questions
+            });
+            
+            // Add the new quiz to state
+            setQuizzes([...quizzes, response.data.quiz]);
+            
+            // Reset form and close it
+            setShowCreateForm(false);
+            setQuizForm({
+                title: '',
+                description: '',
+                timeLimit: 30,
+                startDate: formatDateForInput(new Date()),
+                endDate: formatDateForInput(new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)),
+                questions: [{ 
+                    text: '',
+                    options: ['', '', '', ''],
+                    correctOption: 0
+                }]
+            });
+            
+            alert('Quiz created successfully!');
+        } catch (err) {
+            console.error('Error creating quiz:', err);
+            alert('Failed to create quiz. Please try again.');
+        } finally {
+            setLoading(false);
+        }
     };
     
-    // Start taking a quiz
+    // Update the startQuiz function to use a more reliable interval approach
     const startQuiz = (quiz) => {
         setCurrentQuiz(quiz);
         setCurrentAnswers(new Array(quiz.questions.length).fill(null));
@@ -252,10 +249,15 @@ const QuizzesView = ({ courseId, isProfessor }) => {
         // Set up timer for quiz time limit
         const timeLimit = quiz.timeLimit * 60 * 1000; // Convert minutes to milliseconds
         setQuizTimeLeft(timeLimit);
+        setRemainingTime(timeLimit);
         
-        // Clear any existing timeout
+        // Clear any existing timeout and interval
         if (timeoutId) {
             clearTimeout(timeoutId);
+        }
+        
+        if (intervalRef.current) {
+            clearInterval(intervalRef.current);
         }
         
         // Set up new timeout for auto-submission
@@ -265,16 +267,40 @@ const QuizzesView = ({ courseId, isProfessor }) => {
         }, timeLimit);
         
         setTimeoutId(id);
+        
+        // Use a timestamp-based approach for more accurate countdown
+        const startTime = Date.now();
+        
+        // Create interval to update the countdown every second
+        intervalRef.current = setInterval(() => {
+            const elapsedTime = Date.now() - startTime;
+            const remaining = timeLimit - elapsedTime;
+            
+            if (remaining <= 0) {
+                clearInterval(intervalRef.current);
+                setRemainingTime(0);
+                return;
+            }
+            
+            setRemainingTime(remaining);
+        }, 1000);
     };
     
-    // Clean up timeout on component unmount or when quiz is closed
+    // Make sure the formatTimeRemaining function is defined correctly
+    const formatTimeRemaining = (milliseconds) => {
+        if (milliseconds === null || milliseconds === undefined) return '00:00';
+        
+        const totalSeconds = Math.max(0, Math.floor(milliseconds / 1000));
+        const minutes = Math.floor(totalSeconds / 60);
+        const seconds = totalSeconds % 60;
+        
+        return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    };
+    
+    // Add a debug useEffect to monitor remainingTime changes
     useEffect(() => {
-        return () => {
-            if (timeoutId) {
-                clearTimeout(timeoutId);
-            }
-        };
-    }, [timeoutId]);
+        console.log("Remaining time updated:", remainingTime);
+    }, [remainingTime]);
     
     // Handle answer selection
     const handleAnswerSelect = (questionIndex, optionIndex) => {
@@ -284,10 +310,15 @@ const QuizzesView = ({ courseId, isProfessor }) => {
     };
     
     // Submit a completed quiz
-    const submitQuiz = () => {
+    const submitQuiz = async () => {
         if (timeoutId) {
             clearTimeout(timeoutId);
             setTimeoutId(null);
+        }
+        
+        if (intervalRef.current) {
+            clearInterval(intervalRef.current);
+            intervalRef.current = null;
         }
         
         if (currentAnswers.includes(null)) {
@@ -299,32 +330,34 @@ const QuizzesView = ({ courseId, isProfessor }) => {
         
         setQuizSubmitting(true);
         
-        // Calculate results (normally done on the backend)
-        let correctCount = 0;
-        currentQuiz.questions.forEach((question, index) => {
-            if (currentAnswers[index] === question.correctOption) {
-                correctCount++;
-            }
-        });
-        
-        const score = correctCount;
-        const total = currentQuiz.questions.length;
-        const percentage = (score / total) * 100;
-        
-        // Simulate API call delay
-        setTimeout(() => {
-            const result = { score, total, percentage };
+        try {
+            const response = await axios.post('http://localhost:5000/api/quiz/submit', {
+                quizId: currentQuiz.quizId,
+                studentId,
+                answers: currentAnswers
+            });
+            
+            const submission = response.data.submission;
+            const result = {
+                score: submission.score,
+                total: submission.totalQuestions,
+                percentage: submission.percentage
+            };
+            
             setQuizResults(result);
             setQuizCompleted(true);
             
             // Update the results in our local state
             setUserQuizResults({
                 ...userQuizResults,
-                [currentQuiz.id]: result
+                [currentQuiz.quizId]: result
             });
-            
+        } catch (err) {
+            console.error('Error submitting quiz:', err);
+            alert('Failed to submit quiz. Please try again.');
+        } finally {
             setQuizSubmitting(false);
-        }, 1000);
+        }
     };
     
     // Close the quiz view and return to list
@@ -333,6 +366,12 @@ const QuizzesView = ({ courseId, isProfessor }) => {
             clearTimeout(timeoutId);
             setTimeoutId(null);
         }
+        
+        if (intervalRef.current) {
+            clearInterval(intervalRef.current);
+            intervalRef.current = null;
+        }
+        
         setCurrentQuiz(null);
         setSelectedQuizId(null);
     };
@@ -352,7 +391,23 @@ const QuizzesView = ({ courseId, isProfessor }) => {
         }
     };
     
-    if (loading) {
+    // Delete a quiz (professor only)
+    const handleDeleteQuiz = async (quizId) => {
+        if (!isProfessor) return;
+        
+        if (window.confirm('Are you sure you want to delete this quiz? This will also delete all student submissions.')) {
+            try {
+                await axios.delete(`http://localhost:5000/api/quiz/${quizId}`);
+                setQuizzes(quizzes.filter(quiz => quiz.quizId !== quizId));
+                alert('Quiz deleted successfully');
+            } catch (err) {
+                console.error('Error deleting quiz:', err);
+                alert('Failed to delete quiz. Please try again.');
+            }
+        }
+    };
+    
+    if (loading && quizzes.length === 0) {
         return <div className="loading-container">Loading quizzes...</div>;
     }
     
@@ -365,6 +420,11 @@ const QuizzesView = ({ courseId, isProfessor }) => {
                     <div className="quiz-meta">
                         <span className="time-limit">Time Limit: {currentQuiz.timeLimit} minutes</span>
                         <span className="question-count">Questions: {currentQuiz.questions.length}</span>
+                        {remainingTime !== null && (
+                            <span className={`time-remaining ${remainingTime < 60000 ? 'low' : ''}`}>
+                                Time Remaining: {formatTimeRemaining(remainingTime)}
+                            </span>
+                        )}
                     </div>
                 </div>
                 
@@ -372,7 +432,7 @@ const QuizzesView = ({ courseId, isProfessor }) => {
                     <>
                         <div className="quiz-questions">
                             {currentQuiz.questions.map((question, qIndex) => (
-                                <div key={question.id || qIndex} className="quiz-question">
+                                <div key={question.questionId} className="quiz-question">
                                     <h3>Question {qIndex + 1}</h3>
                                     <p className="question-text">{question.text}</p>
                                     
@@ -591,11 +651,11 @@ const QuizzesView = ({ courseId, isProfessor }) => {
                 ) : (
                     quizzes.map(quiz => {
                         const isAvailable = isQuizAvailable(quiz);
-                        const hasCompleted = userQuizResults[quiz.id];
+                        const hasCompleted = userQuizResults[quiz.quizId];
                         const availabilityStatus = getAvailabilityStatus(quiz);
                         
                         return (
-                            <div key={quiz.id} className={`quiz-card ${!isAvailable ? 'unavailable' : ''}`}>
+                            <div key={quiz.quizId} className={`quiz-card ${!isAvailable ? 'unavailable' : ''}`}>
                                 <div className="quiz-info">
                                     <h3>{quiz.title}</h3>
                                     <p className="quiz-description">{quiz.description}</p>
@@ -610,13 +670,29 @@ const QuizzesView = ({ courseId, isProfessor }) => {
                                 <div className="quiz-actions">
                                     {isProfessor ? (
                                         <div className="professor-quiz-actions">
-                                            <button className="view-results-btn">View Results</button>
-                                            <button className="edit-quiz-btn">Edit</button>
+                                            <button 
+                                                className="view-results-btn"
+                                                onClick={() => alert('View results functionality will be implemented soon')}
+                                            >
+                                                View Results
+                                            </button>
+                                            <button 
+                                                className="edit-quiz-btn"
+                                                onClick={() => alert('Edit quiz functionality will be implemented soon')}
+                                            >
+                                                Edit
+                                            </button>
+                                            <button 
+                                                className="delete-quiz-btn"
+                                                onClick={() => handleDeleteQuiz(quiz.quizId)}
+                                            >
+                                                Delete
+                                            </button>
                                         </div>
                                     ) : hasCompleted ? (
                                         <div className="student-quiz-result">
                                             <span className="quiz-score">
-                                                Score: {userQuizResults[quiz.id].score}/{userQuizResults[quiz.id].total} ({userQuizResults[quiz.id].percentage.toFixed(1)}%)
+                                                Score: {userQuizResults[quiz.quizId].score}/{userQuizResults[quiz.quizId].total} ({userQuizResults[quiz.quizId].percentage.toFixed(1)}%)
                                             </span>
                                             {isAvailable && (
                                                 <button className="retake-quiz-btn" onClick={() => startQuiz(quiz)}>
