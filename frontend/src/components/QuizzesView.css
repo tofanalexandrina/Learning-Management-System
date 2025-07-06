@@ -72,6 +72,8 @@
     border: 1px solid #ddd;
     border-radius: 5px;
     font-size: 1em;
+    box-sizing: border-box;
+    font-family: inherit;
 }
 
 .form-group textarea {
@@ -137,11 +139,37 @@
     margin-bottom: 10px;
 }
 
-.option-indicator {
+.option-indicator-creating{
     display: flex;
+    justify-content: center;
     align-items: center;
     margin-right: 10px;
-    width: 40px;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+}
+
+.option-indicator-creating input[type="radio"] {
+    margin-right: 5px;
+}
+
+.option-indicator-creating input[type="text"] {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.option-indicator {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 10px;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    color: #4A4A4A;
+    background-color: #f0f0f0;
 }
 
 .option-indicator input[type="radio"] {
@@ -273,7 +301,7 @@
     gap: 10px;
 }
 
-.view-results-btn, .edit-quiz-btn {
+.view-results-btn, .delete-quiz-btn {
     background-color: #f0f0f0;
     color: #555;
     border: none;
@@ -283,7 +311,7 @@
     font-size: 0.9em;
 }
 
-.view-results-btn:hover, .edit-quiz-btn:hover {
+.view-results-btn:hover, .delete-quiz-btn:hover {
     background-color: #e0e0e0;
 }
 
@@ -395,19 +423,6 @@
 .question-option.selected {
     background-color: #e7f0fd;
     border-color: #78A1E1;
-}
-
-.option-indicator {
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    width: 28px;
-    height: 28px;
-    background-color: #f0f0f0;
-    border-radius: 50%;
-    margin-right: 12px;
-    color: #4A4A4A;
-    font-weight: 500;
 }
 
 .question-option.selected .option-indicator {
@@ -537,7 +552,6 @@
     font-weight: 500;
 }
 
-/* Add this to your existing CSS */
 .time-remaining {
     font-weight: 700;
     color: #F4AEA2;

@@ -417,3 +417,54 @@
 .submission-info .value {
     color: #4A4A4A;
 }
+
+/*marks styling*/
+.submission-mark {
+    margin-top: 10px;
+}
+
+.mark-input-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 5px;
+}
+
+.mark-input {
+    width: 60px;
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.save-mark-btn, .edit-mark-btn {
+    background-color: #78A1E1;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 0.9em;
+    margin-left: 10px;
+}
+
+.cancel-mark-btn {
+    background-color: #f0f0f0;
+    color: #555;
+    border: none;
+    border-radius: 4px;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 0.9em;
+}
+
+.mark-display {
+    display: flex;
+    align-items: center;
+}
+
+.mark-value {
+    font-weight: bold;
+    color: #4CAF50;
+}
+

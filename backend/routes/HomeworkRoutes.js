@@ -13,6 +13,7 @@ router.get('/course/:courseId', HomeworkController.getHomeworksByCourse);
 router.get('/download/:homeworkId', HomeworkController.downloadHomework);
 router.get('/submissions/groups/:homeworkId', HomeworkController.getHomeworkSubmissionGroups);
 router.get('/submissions/:homeworkId/:groupId', HomeworkController.getHomeworkSubmissionsByGroup);
+router.post('/assign-mark', HomeworkController.assignMark);
 
 // Routes for students
 router.post('/submit', upload.single('answerFile'), HomeworkController.submitHomeworkAnswer);

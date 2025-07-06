@@ -334,3 +334,35 @@ exports.getHomeworkSubmissionGroups = async (req, res) => {
         res.status(500).json({ message: 'Error fetching submissions: ' + err.message });
     }
 };
+
+exports.assignMark=async(req, res)=>{
+    try{
+        const {answerId, mark}=req.body;
+        if(!answerId||mark===undefined||mark===null){
+            return res.status(400).json({message:'Required fields missing'});
+        }
+
+        const markValue=Number(mark);
+        if(isNaN(markValue)||markValue<0||markValue>10){
+            return res.status(400).json({message:'Mark must be a number between 0 and 10'});
+        }
+
+        const submission=await HomeworkAnswer.findOne({answerId});
+        if(!submission){
+            return res.statur(404).json({message:'Submission not found'});
+        }
+
+        submission.mark=markValue;
+        await submission.save();
+
+        res.status(200).json({
+            success:true,
+            message:'Mark assigned successfully',
+            submission
+        });
+
+    }catch(err){
+        console.error("Error assigning mark:", err);
+        res.status(500).json({message:"Internal server error"});
+    }
+}

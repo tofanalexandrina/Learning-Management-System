@@ -297,11 +297,6 @@ const QuizzesView = ({ courseId, isProfessor }) => {
         return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
     };
     
-    // Add a debug useEffect to monitor remainingTime changes
-    useEffect(() => {
-        console.log("Remaining time updated:", remainingTime);
-    }, [remainingTime]);
-    
     // Handle answer selection
     const handleAnswerSelect = (questionIndex, optionIndex) => {
         const updatedAnswers = [...currentAnswers];
@@ -604,7 +599,7 @@ const QuizzesView = ({ courseId, isProfessor }) => {
                                         <label>Answer Options</label>
                                         {question.options.map((option, oIndex) => (
                                             <div key={oIndex} className="option-input-group">
-                                                <div className="option-indicator">
+                                                <div className="option-indicator-creating">
                                                     <input 
                                                         type="radio" 
                                                         name={`correctOption-${qIndex}`} 
@@ -675,12 +670,6 @@ const QuizzesView = ({ courseId, isProfessor }) => {
                                                 onClick={() => alert('View results functionality will be implemented soon')}
                                             >
                                                 View Results
-                                            </button>
-                                            <button 
-                                                className="edit-quiz-btn"
-                                                onClick={() => alert('Edit quiz functionality will be implemented soon')}
-                                            >
-                                                Edit
                                             </button>
                                             <button 
                                                 className="delete-quiz-btn"

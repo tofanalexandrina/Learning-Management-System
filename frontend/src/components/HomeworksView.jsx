@@ -15,6 +15,7 @@ const HomeworksView = ({ courseId, isProfessor }) => {
         file: null
     });
     const [uploadStatus, setUploadStatus] = useState({ message: '', type: '' });
+    const [editingMarks, setEditingMarks]=useState({});
     
     // For student submissions
     const [studentSubmissions, setStudentSubmissions] = useState({});
@@ -264,6 +265,51 @@ const HomeworksView = ({ courseId, isProfessor }) => {
         }
     };
 
+    //handle mark input change
+    const handleMarkChange=(answerId, value)=>{
+        setEditingMarks({
+            ...editingMarks,
+            [answerId]:value
+        });
+    };
+
+    //save mark to backend
+    const handleSaveMark=async(answerId)=>{
+        try{
+            const mark=editingMarks[answerId];
+            if(mark===undefined||isNaN(Number(mark))||Number(mark)<0||Number(mark)>10){
+                alert('Please enter a valid mark between 0 and 10');
+                return;
+            }
+
+            await axios.post('http://localhost:5000/api/homework/assign-mark', {
+                answerId,
+                mark: Number(mark)
+            });
+
+            //update local state with new mark
+            setGroupSubmissions(groupSubmissions.map(submission=>{
+                if(submission.answerId===answerId){
+                    return{
+                        ...submission,
+                        mark: Number(mark)
+                    };
+                }
+                return submission;
+            }));
+
+            //clear editing state
+            const newEditingMarks={...editingMarks};
+            delete newEditingMarks[answerId];
+            setEditingMarks(newEditingMarks);
+            alert('Mark saved successfully.');
+
+        }catch(err){
+            console.error('Error saving mark:', err);
+            alert('Failed to save mark. Please try again.');
+        }
+    }
+
     if (loading && homeworks.length === 0) {
         return <div className="loading-container">Loading homeworks...</div>;
     }
@@ -409,6 +455,33 @@ const HomeworksView = ({ courseId, isProfessor }) => {
                                                                         {submission.answerFiles[0].fileName}
                                                                     </span>
                                                                 </div>
+
+                                                                <div className="submission-mark">
+                                                                    <span className="label">Mark:</span>
+                                                                    {editingMarks.hasOwnProperty(submission.answerId)?(
+                                                                        <div className="mark-input-group">
+                                                                            <input type="number" min="0" max="10" step="0.5" value={editingMarks[submission.answerId]}
+                                                                            onChange={(e)=>handleMarkChange(submission.answerId, e.target.value)}
+                                                                            className="mark-input"/>
+                                                                            <button onClick={()=>handleSaveMark(submission.answerId)} className="save-mark-btn">Save</button>
+                                                                            <button onClick={()=>{const newEditingMarks={...editingMarks};
+                                                                            delete newEditingMarks[submission.answerId];
+                                                                            setEditingMarks(newEditingMarks);
+                                                                        }}
+                                                                        className="cancel-mark-btn">Cancel</button>
+                                                                        </div>
+                                                                    ):(
+                                                                        <div className="mark-display">
+                                                                            <span className="value">
+                                                                                {submission.mark!==undefined?submission.mark:'Not graded'}
+                                                                            </span>
+                                                                            <button onClick={()=>setEditingMarks({
+                                                                                ...editingMarks, [submission.answerId]:submission.mark||''
+                                                                            })}
+                                                                            className="edit-mark-btn">Edit</button>
+                                                                        </div>
+                                                                    )}
+                                                                </div>
                                                             </div>
                                                             <button 
                                                                 className="download-btn"
@@ -491,6 +564,16 @@ const HomeworksView = ({ courseId, isProfessor }) => {
                                                         <span className="label">Submitted:</span>
                                                         <span className="value">
                                                             {new Date(studentSubmissions[homework.homeworkId].answerFiles[0].uploadDate).toLocaleString()}
+                                                        </span>
+                                                    </p>
+                                                    {/*mark display*/}
+                                                    <p>
+                                                        <span className="label">Mark:</span>
+                                                        <span className="value mark-value">
+                                                            {studentSubmissions[homework.homeworkId].mark!==undefined
+                                                            ? `${studentSubmissions[homework.homeworkId].mark}/10`
+                                                            : 'Not graded yet'
+                                                        }
                                                         </span>
                                                     </p>
                                                     <button 
