@@ -176,4 +176,85 @@ exports.unenrollStudentsByGroups = async function(courseId, groups) {
     }
 };
 
+exports.findCourseByAccessCode=async(req, res)=>{
+    try{
+        const { accessCode } = req.body;
+        
+        if (!accessCode) {
+            return res.status(400).json({ error: 'Access code is required' });
+        }
+        
+        const course = await Course.findOne({ accessCode });
+        if (!course) {
+            return res.status(404).json({ error: 'Course not found' });
+        }
+        
+        // Find the professor info for this course
+        const professor = await Professor.findOne({ professorId: course.professorId });
+        const professorName = professor ? 
+            `${professor.professorFirstName} ${professor.professorLastName}` : 
+            'Unknown';
+        
+        res.status(200).json({
+            courseId: course.courseId,
+            courseName: course.courseName,
+            class: course.class,
+            professorName
+        });
+
+    }catch(err){
+        console.error('Error finding course by code:', err);
+        res.status(500).json({ error: 'Error finding course', details: err.message });
+
+    }
+}
+
+exports.enrollStudent=async(req, res)=>{
+    try{
+        const { courseId, studentId } = req.body;
+        
+        if (!courseId || !studentId) {
+            return res.status(400).json({ error: 'Course ID and Student ID are required' });
+        }
+        
+        const course = await Course.findOne({ courseId });
+        if (!course) {
+            return res.status(404).json({ error: 'Course not found' });
+        }
+        
+        const student = await Student.findOne({ studentId });
+        if (!student) {
+            return res.status(404).json({ error: 'Student not found' });
+        }
+        
+        // Check if student is already enrolled
+        if (student.courses.includes(course._id)) {
+            return res.status(400).json({ error: 'Already enrolled in this course' });
+        }
+        
+        // Check if the student's group is assigned to this course
+        if (!course.assignedGroups.includes(student.group)) {
+            // Add student's group to the course's assigned groups
+            course.assignedGroups.push(student.group);
+            await course.save();
+        }
+        
+        // Add the course to student's courses
+        student.courses.push(course._id);
+        await student.save();
+
+        res.status(200).json({ 
+            message: 'Enrolled successfully',
+            course: {
+                courseId: course.courseId,
+                courseName: course.courseName,
+                class: course.class
+            }
+        });
+
+    }catch(err){
+        console.error('Error enrolling student:', err);
+        res.status(500).json({ error: 'Error enrolling student', details: err.message });
+    }
+}
 

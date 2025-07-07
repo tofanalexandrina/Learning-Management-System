@@ -96,3 +96,103 @@ animation: slideIn 0.5s ease-in-out;
         transform: translateX(0);
     }
 }
+
+.course-code-search {
+    width: 100%;
+    margin-bottom: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.course-code-search form {
+    display: flex;
+    gap: 10px;
+    max-width: 500px;
+    width: 100%;
+}
+
+.course-code-search input {
+    padding: 10px 15px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    flex-grow: 1;
+    font-size: 1em;
+}
+
+.course-code-search button {
+    padding: 10px 20px;
+    background-color: #F4AEA2;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.course-code-search button:hover {
+    background-color: #e79386;
+}
+
+.course-code-search button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+/* Modal styles */
+.course-enrollment-modal {
+    background-color: white;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+}
+
+.modal-body {
+    padding: 20px;
+}
+
+.course-info p {
+    margin: 10px 0;
+    font-size: 1em;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    padding: 15px 20px;
+    background-color: #f5f5f5;
+    gap: 15px;
+}
+
+.cancel-btn {
+    padding: 8px 15px;
+    background-color: #f0f0f0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.enroll-btn {
+    padding: 8px 15px;
+    background-color: #78A1E1;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.error-message {
+    color: #e05e4e;
+    margin-top: 10px;
+    font-size: 0.9em;
+}
+
+.no-courses-message {
+    text-align: center;
+    padding: 40px 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    margin: 20px 0;
+}

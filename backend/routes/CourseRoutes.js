@@ -7,5 +7,7 @@ router.get('/', CourseController.getAllCourses);
 router.get('/:id', CourseController.getCourseById);
 router.put('/:id', CourseController.updateCourse);
 router.delete('/:id', CourseController.deleteCourse);
+router.post('/find-by-code', CourseController.findCourseByAccessCode);
+router.post('/enroll-student', CourseController.enrollStudent);
 
 module.exports=router;
