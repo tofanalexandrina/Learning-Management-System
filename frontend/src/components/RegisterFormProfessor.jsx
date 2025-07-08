@@ -64,17 +64,20 @@ const RegisterFormProfessor = () => {
         setMessage('');
 
         try{
+            // Fix: Use GROUPS instead of undefined 'groups' variable
             const selectedGroupObjects = selectedGroups.map(id => {
-                const group = groups.find(g => g.id === id);
+                const group = GROUPS.find(g => g.id === id);
                 return { id, name: group.name };
             });
-            const response=await axios.post('http://localhost:5000/api/email/send-professor-invite', {
+            
+            const response = await axios.post('http://localhost:5000/api/email/send-professor-invite', {
                 personalEmail: personalEmail,
                 systemEmail: systemEmail,
                 groups: selectedGroupObjects
             });
+            
             setMessage('Invitation sent successfully!');
-        }catch (error) {
+        } catch (error) {
             console.error('Error sending invite:', error);
             setMessage('Error sending invite. Please try again later.');
         } finally {
