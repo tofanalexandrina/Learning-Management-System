@@ -264,3 +264,65 @@ exports.getQuizSubmissions = async (req, res) => {
         res.status(500).json({ message: 'Internal server error' });
     }
 };
+
+//for professors to get all groups that have submissions for a specific quiz
+exports.getQuizSubmissionGroups=async(req, res)=>{
+    try{
+        const {quizId}=req.params;
+        const quiz=await Quiz.findOne({quizId});
+        if(!quiz){
+            return res.status(404).json({message:'Quiz not found'});
+        }
+        //get all submissions
+        const submissions=await QuizSubmission.find({quizId: quiz._id});
+        if(submissions.length===0){
+            return res.status(200).json([]);
+        }
+
+        //get student ids
+        const studentIds=submissions.map(submission=>submission.studentId);
+        //get students with the ids
+        const students=await Student.find({_id:{$in:studentIds}});
+        //extract unique groups
+        const groups=[...new Set(students.map(student=>student.group))];
+        res.status(200).json(groups);
+
+    }catch(err){
+        console.error("Error fetching submission groups:", err);
+        res.status(500).json({message:"Error fetching submissions"});
+    }
+}
+
+//for professors to get quiz submissions by group
+exports.getQuizSubmissionsByGroup=async(req, res)=>{
+    try{
+        const {quizId, groupId}=req.params;
+        const quiz=await Quiz.findOne({quizId});
+        if(!quiz){
+            return res.status(404).json({message:'Quiz not found'});
+        }
+
+        //find all students in specified group
+        const students=await Student.find({group: groupId});
+        if(students.length===0){
+            return res.status(200).json([]);
+        }
+
+        //extract student ids for query
+        const studentIds=students.map(student=>student._id);
+        //get submissions that match the quiz and students
+        const submissions=await QuizSubmission.find({
+            quizId:quiz._id,
+            studentId:{$in:studentIds}
+        }).populate({
+            path:'studentId',
+            select:'studentFirstName studentLastName studentId'
+        });
+
+        res.status(200).json(submissions);
+
+    }catch(err){
+        console.error("Error fetching quiz submissions by group:", err);
+        res.status(500).json({message:'Error fetching submissions'});
+    }
+};

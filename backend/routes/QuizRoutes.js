@@ -7,6 +7,8 @@ router.post('/create', QuizController.createQuiz);
 router.get('/course/:courseId', QuizController.getQuizzesByCourse);
 router.put('/:quizId', QuizController.updateQuiz);
 router.delete('/:quizId', QuizController.deleteQuiz);
+router.get('/submissions/groups/:quizId', QuizController.getQuizSubmissionGroups);
+router.get('/submissions/:quizId/:groupId', QuizController.getQuizSubmissionsByGroup);
 
 // Routes for students
 router.post('/submit', QuizController.submitQuiz);
