@@ -290,7 +290,7 @@ const QuizzesView = ({ courseId, isProfessor }) => {
     // Set up new timeout for auto-submission
     const id = setTimeout(() => {
       alert("Time's up! Your quiz will be submitted automatically.");
-      submitQuiz();
+      submitQuiz(true); // Pass true to indicate this is an auto-submission
     }, timeLimit);
 
     setTimeoutId(id);
@@ -334,7 +334,7 @@ const QuizzesView = ({ courseId, isProfessor }) => {
   };
 
   // Submit a completed quiz
-  const submitQuiz = async () => {
+  const submitQuiz = async (isAutoSubmit = false) => {
     if (timeoutId) {
       clearTimeout(timeoutId);
       setTimeoutId(null);
@@ -345,7 +345,8 @@ const QuizzesView = ({ courseId, isProfessor }) => {
       intervalRef.current = null;
     }
 
-    if (currentAnswers.includes(null)) {
+    // Skip confirmation for auto-submissions when time expires
+    if (!isAutoSubmit && currentAnswers.includes(null)) {
       const confirmSubmit = window.confirm(
         "You haven't answered all questions. Are you sure you want to submit?"
       );
@@ -386,6 +387,11 @@ const QuizzesView = ({ courseId, isProfessor }) => {
       alert("Failed to submit quiz. Please try again.");
     } finally {
       setQuizSubmitting(false);
+      
+      // Always close the quiz if it was an auto-submission due to timeout
+      if (isAutoSubmit) {
+        closeQuiz();
+      }
     }
   };
 
