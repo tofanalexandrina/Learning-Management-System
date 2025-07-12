@@ -16,10 +16,23 @@ const RegisterFormProfessor = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if(!systemEmail || selectedGroups.length === 0){
-            setMessage('Error! System Email and Group are required for registration.');
+
+        //email validation
+        const emailPattern= /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if(!systemEmail || !emailPattern.test(systemEmail)){
+            setMessage('Error! Please enter a valid system email address.');
             return;
         }
+
+        if(selectedGroups.length===0){
+            setMessage('Error! Please select at least one group!');
+            return;
+        }
+        if (!systemEmail.endsWith('@mentis.com')) {
+            setMessage('Error! System email must be ending in @mentis.com.');
+            return;
+        }
+
         setLoading(true);
         setMessage('');
         try{
@@ -56,10 +69,29 @@ const RegisterFormProfessor = () => {
 
     const handleSendInvite = async (e) => {
         e.preventDefault();
-        if(!systemEmail || !personalEmail || selectedGroups.length === 0){
-            setMessage('Error! All fields are required!');
+
+        //email validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!personalEmail || !emailRegex.test(personalEmail)) {
+            setMessage('Error! Please enter a valid personal email address.');
             return;
         }
+
+        if (!systemEmail || !emailRegex.test(systemEmail)) {
+            setMessage('Error! Please enter a valid system email address.');
+            return;
+        }
+
+        if (selectedGroups.length === 0) {
+            setMessage('Error! Please select at least one group.');
+            return;
+        }
+
+        if (personalEmail === systemEmail) {
+            setMessage('Error! Personal email and system email must be different.');
+            return;
+        }
+        
         setLoading(true);
         setMessage('');
 

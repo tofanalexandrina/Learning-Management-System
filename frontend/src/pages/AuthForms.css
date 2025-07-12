@@ -71,3 +71,29 @@
     font-size: 0.9em;
     text-align: center;
 }
+
+.login-error {
+    background-color: #ffecec;
+    color: #e05e4e;
+    padding: 12px 15px;
+    border-left: 4px solid #e05e4e;
+    border-radius: 5px;
+    margin: 15px 0;
+    font-size: 0.9em;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.login-error:before {
+    margin-right: 10px;
+    font-size: 1.1em;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}

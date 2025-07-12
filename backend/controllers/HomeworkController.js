@@ -23,7 +23,7 @@ exports.createHomework = async (req, res) => {
     try {
         const { homeworkTitle, homeworkDescription, courseId, dueDate } = req.body;
 
-        if (!homeworkTitle || !homeworkDescription || !courseId) {
+        if (!homeworkTitle || !homeworkDescription || !courseId || !dueDate) {
             return res.status(400).json({ message: 'Required fields missing' });
         }
 

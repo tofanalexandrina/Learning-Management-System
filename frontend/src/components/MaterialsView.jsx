@@ -44,10 +44,67 @@ const MaterialsView=({courseId, isProfessor})=>{
     const handleSubmit=async(e)=>{
         e.preventDefault();
 
-        if(!uploadForm.title || !uploadForm.description || !uploadForm.file){
-            setUploadStatus({message: 'All fields are required', type: 'error'});
-            return;
+        if (!uploadForm.title.trim()) {
+          setUploadStatus({ message: "Title is required", type: "error" });
+          return;
         }
+
+        if (!uploadForm.description.trim()) {
+          setUploadStatus({
+            message: "Description is required",
+            type: "error",
+          });
+          return;
+        }
+
+        //file validation
+        if (!uploadForm.file) {
+          setUploadStatus({
+            message: "Please select a file to upload",
+            type: "error",
+          });
+          return;
+        }
+
+        // Check file size (20 MB limit)
+        if (uploadForm.file.size > 20 * 1024 * 1024) {
+          setUploadStatus({
+            message: "File size must be less than 20MB",
+            type: "error",
+          });
+          return;
+        }
+
+        // Check file type
+        const fileName = uploadForm.file.name.toLowerCase();
+        const allowedTypes = [
+          ".pdf",
+          ".doc",
+          ".docx",
+          ".ppt",
+          ".pptx",
+          ".txt",
+          ".zip",
+          ".rar",
+          ".jpg",
+          ".jpeg",
+          ".png",
+        ];
+        const hasValidExtension = allowedTypes.some((ext) =>
+          fileName.endsWith(ext)
+        );
+
+        if (!hasValidExtension) {
+          setUploadStatus({
+            message:
+              "File type not allowed. Please use document, image or archive files",
+            type: "error",
+          });
+          return;
+        }
+
+
+
         try{
             setLoading(true);
             const formData=new FormData();

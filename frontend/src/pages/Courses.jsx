@@ -81,7 +81,15 @@ const Courses = () => {
     const handleSearchCourse = async (e) => {
         e.preventDefault();
         
-        if (!accessCode) return;
+        if (!accessCode) {
+          setEnrollmentError("Please enter an access code");
+          return;
+        }
+
+        if (accessCode.length < 4) {
+          setEnrollmentError("Access code must be at least 4 characters");
+          return;
+        }
         
         setIsSearching(true);
         setEnrollmentError('');
@@ -106,7 +114,17 @@ const Courses = () => {
     };
 
     const handleEnroll = async () => {
-        if (!foundCourse || !studentId) return;
+        if (!foundCourse) {
+          setEnrollmentError("No course selected for enrollment");
+          return;
+        }
+
+        if (!studentId) {
+          setEnrollmentError(
+            "You must be logged in as a student to enroll in courses"
+          );
+          return;
+        }
         
         setIsEnrolling(true);
         setEnrollmentError('');

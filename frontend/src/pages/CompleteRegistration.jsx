@@ -45,6 +45,42 @@ const CompleteRegistration = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        //required fields validation
+        if (!formData.firstName.trim()) {
+            setError('First name is required');
+            return;
+        }
+
+        if(!formData.lastName.trim()){
+            setError('Last name is required');
+            return;
+        }
+
+        //name format validation - no numbers
+        const nameRegex = /^[A-Za-zÀ-ÖØ-öø-ÿ\s-]+$/;
+        if (!nameRegex.test(formData.firstName) || !nameRegex.test(formData.lastName)) {
+            setError('Names should only contain letters, spaces and hyphens');
+            return;
+        }
+
+        //password validation
+        if (formData.password.length < 4) {
+            setError('Password must be at least 4 characters long');
+            return;
+        }
+
+        //for more complex password
+        //  if (!/[A-Z]/.test(formData.password)) {
+        //    setError("Password must contain at least one uppercase letter");
+        //    return;
+        //  }
+
+        //  if (!/[0-9]/.test(formData.password)) {
+        //    setError("Password must contain at least one number");
+        //    return;
+        //  }
+
         if(formData.password!==formData.confirmPassword){
             setError('Passwords do not match');
             return;

@@ -192,17 +192,34 @@ const QuizzesView = ({ courseId, isProfessor }) => {
       return;
     }
 
+    //time limit validation
+    if (quizForm.timeLimit < 1 || quizForm.timeLimit > 120) {
+        alert("Time limit must be between 1 and 120 minutes.");
+        return;
+    }
+
     // Validate dates
     const startDate = new Date(quizForm.startDate);
     const endDate = new Date(quizForm.endDate);
+    const now=new Date();
 
     if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
       alert("Please provide valid start and end dates.");
       return;
     }
 
+    if (startDate < now) {
+      alert("Start date cannot be in the past.");
+      return;
+    }
+
     if (endDate <= startDate) {
       alert("End date must be after start date.");
+      return;
+    }
+
+    if (quizForm.questions.length === 0) {
+      alert("Please add at least one question.");
       return;
     }
 

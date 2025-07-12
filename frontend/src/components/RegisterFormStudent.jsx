@@ -17,10 +17,25 @@ const RegisterFormStudent = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if(!systemEmail || !group){
-            setMessage('Error! System Email and Group are required for registration.');
+
+        //email validation
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if(!systemEmail || !emailPattern.test(systemEmail)){
+            setMessage('Error! Please enter a valid system email address.');
             return;
         }
+
+        //validation for system email
+        if(!systemEmail.endsWith('@mentis.com')){
+            setMessage('Error! System email must be ending in @mentis.com.');
+            return;
+        }
+        
+        if (!group) {
+        setMessage('Error! Please select a group.');
+        return;
+        }
+        
         setLoading(true);
         setMessage('');
 
@@ -52,6 +67,27 @@ const RegisterFormStudent = () => {
         }
         setLoading(true);
         setMessage('');
+
+        //validation for email
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if(!personalEmail || !emailPattern.test(personalEmail)){
+            setMessage('Error! Please enter a valid personal email address.');
+            return;
+        }
+        if(!systemEmail||!emailPattern.test(systemEmail)){
+            setMessage('Error! Please enter a valid system email address.');
+            return;
+        }
+        if(!group){
+            setMessage('Error! Please select a group.');
+            return;
+        }
+        if(personaEmail===systemEmail){
+            setMessage('Error! Personal email and system email must be different.');
+            return;
+        }
+
+
 
         try {
             //getting group name

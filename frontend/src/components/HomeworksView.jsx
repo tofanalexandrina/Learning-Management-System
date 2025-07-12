@@ -100,51 +100,106 @@ const HomeworksView = ({ courseId, isProfessor }) => {
     };
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
+      e.preventDefault();
 
-        if (!uploadForm.title || !uploadForm.description) {
-            setUploadStatus({ message: 'Title and description are required', type: 'error' });
+      if (!uploadForm.title.trim()) {
+        setUploadStatus({ message: "Title is required", type: "error" });
+        return;
+      }
+
+      if (!uploadForm.description.trim()) {
+        setUploadStatus({ message: "Description is required", type: "error" });
+        return;
+      }
+
+      if (!uploadForm.dueDate) {
+        setUploadStatus({ message: "Due date is required", type: "error" });
+        return;
+    }
+
+      //due date validation - if provided must be in the future
+      if (uploadForm.dueDate) {
+        const dueDate = new Date(uploadForm.dueDate);
+        const now = new Date();
+
+        if (dueDate <= now) {
+          setUploadStatus({
+            message: "Due date must be in the future",
+            type: "error",
+          });
+          return;
+        }
+      }
+
+      //file validation - if provided
+      if (uploadForm.file) {
+        // Check file size (10 MB limit)
+        if (uploadForm.file.size > 10 * 1024 * 1024) {
+            setUploadStatus({ message: 'File size must be less than 10MB', type: 'error' });
             return;
         }
-
-        try {
-            setLoading(true);
-            const formData = new FormData();
-            formData.append('homeworkTitle', uploadForm.title);
-            formData.append('homeworkDescription', uploadForm.description);
-            formData.append('courseId', courseId);
-            
-            if (uploadForm.dueDate) {
-                formData.append('dueDate', uploadForm.dueDate);
-            }
-            
-            if (uploadForm.file) {
-                formData.append('homeworkFile', uploadForm.file);
-            }
-
-            await axios.post('http://localhost:5000/api/homework/create', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
+        
+        // Check file type
+        const allowedTypes = ['.pdf', '.doc', '.docx', '.ppt', '.pptx', '.txt', '.zip', '.rar'];
+        const fileExt = '.' + uploadForm.file.name.split('.').pop().toLowerCase();
+        
+        if (!allowedTypes.includes(fileExt)) {
+            setUploadStatus({ 
+                message: 'File type not allowed. Please use PDF, Word, PowerPoint, text or archive files', 
+                type: 'error' 
             });
-            
-            setUploadStatus({ message: 'Homework created successfully', type: 'success' });
-            setUploadForm({ title: '', description: '', dueDate: '', file: null });
-
-            // Refresh homeworks list
-            fetchHomeworks();
-
-            // Hide form after upload
-            setTimeout(() => {
-                setShowUploadForm(false);
-                setUploadStatus({ message: '', type: '' });
-            }, 2000);
-        } catch (err) {
-            console.error("Error creating homework:", err);
-            setUploadStatus({ message: 'Failed to create homework', type: 'error' });
-        } finally {
-            setLoading(false);
+            return;
         }
+    }
+
+      try {
+        setLoading(true);
+        const formData = new FormData();
+        formData.append("homeworkTitle", uploadForm.title);
+        formData.append("homeworkDescription", uploadForm.description);
+        formData.append("courseId", courseId);
+
+        if (uploadForm.dueDate) {
+          formData.append("dueDate", uploadForm.dueDate);
+        }
+
+        if (uploadForm.file) {
+          formData.append("homeworkFile", uploadForm.file);
+        }
+
+        await axios.post(
+          "http://localhost:5000/api/homework/create",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+
+        setUploadStatus({
+          message: "Homework created successfully",
+          type: "success",
+        });
+        setUploadForm({ title: "", description: "", dueDate: "", file: null });
+
+        // Refresh homeworks list
+        fetchHomeworks();
+
+        // Hide form after upload
+        setTimeout(() => {
+          setShowUploadForm(false);
+          setUploadStatus({ message: "", type: "" });
+        }, 2000);
+      } catch (err) {
+        console.error("Error creating homework:", err);
+        setUploadStatus({
+          message: "Failed to create homework",
+          type: "error",
+        });
+      } finally {
+        setLoading(false);
+      }
     };
 
     const handleSubmitHomework = async (homeworkId) => {
@@ -152,6 +207,39 @@ const HomeworksView = ({ courseId, isProfessor }) => {
             setSubmitStatus({ message: 'Please select a file to submit', type: 'error' });
             return;
         }
+
+        //check for file size
+        if (submissionFile.size > 10 * 1024 * 1024) {
+          setSubmitStatus({
+            message: "File size must be less than 10MB",
+            type: "error",
+          });
+          return;
+        }
+        //check for file type
+        const allowedTypes = [
+          ".pdf",
+          ".doc",
+          ".docx",
+          ".ppt",
+          ".pptx",
+          ".txt",
+          ".zip",
+          ".rar",
+        ];
+        const fileExt =
+          "." + submissionFile.name.split(".").pop().toLowerCase();
+
+        if (!allowedTypes.includes(fileExt)) {
+          setSubmitStatus({
+            message:
+              "File type not allowed. Please use PDF, Word, PowerPoint, text or archive files",
+            type: "error",
+          });
+          return;
+        }
+
+        
 
         try {
             setSubmitting(true);
@@ -278,8 +366,13 @@ const HomeworksView = ({ courseId, isProfessor }) => {
         try{
             const mark=editingMarks[answerId];
             if(mark===undefined||isNaN(Number(mark))||Number(mark)<0||Number(mark)>10){
-                alert('Please enter a valid mark between 0 and 10');
+                alert('Please enter a valid number between 0 and 10');
                 return;
+            }
+
+            if (markNum.toString().split(".")[1]?.length > 1) {
+              alert("Mark can have at most 1 decimal place");
+              return;
             }
 
             await axios.post('http://localhost:5000/api/homework/assign-mark', {
@@ -363,12 +456,13 @@ const HomeworksView = ({ courseId, isProfessor }) => {
                             ></textarea>
                         </div>
                         <div className="form-group">
-                            <label>Due Date (Optional)</label>
+                            <label>Due Date</label>
                             <input 
                                 type="datetime-local" 
                                 name="dueDate" 
                                 value={uploadForm.dueDate} 
                                 onChange={handleInputChange}
+                                required
                             />
                         </div>
                         <div className="form-group">
